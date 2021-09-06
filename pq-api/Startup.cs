@@ -66,6 +66,8 @@ namespace pq_api
 
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
+            services.AddHttpContextAccessor();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

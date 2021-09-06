@@ -1,5 +1,7 @@
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace pq_api.Controllers
@@ -8,6 +10,12 @@ namespace pq_api.Controllers
     [ApiController]
     public class ApiController : ControllerBase
     {
+        private IHttpContextAccessor _httpContextAccessor;
+        public ApiController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         [HttpGet("public")]
         public IActionResult Public()
         {
@@ -21,6 +29,7 @@ namespace pq_api.Controllers
         [Authorize]
         public IActionResult Private()
         {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return Ok(new
             {
                 Message = "Hello from a private endpoint! You need to be authenticated to see this."
@@ -31,6 +40,7 @@ namespace pq_api.Controllers
         [Authorize("read:messages")]
         public IActionResult Scoped()
         {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return Ok(new
             {
                 Message = "Hello from a private endpoint! You need to be authenticated and have a scope of read:messages to see this."
