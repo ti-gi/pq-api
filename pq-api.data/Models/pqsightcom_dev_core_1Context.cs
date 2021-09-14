@@ -20,6 +20,8 @@ namespace pq_api.data.Models
         public virtual DbSet<Competition> Competitions { get; set; }
         public virtual DbSet<Contestant> Contestants { get; set; }
 
+        public virtual DbSet<CompetitionResults> CompetitionResults { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -66,6 +68,11 @@ namespace pq_api.data.Models
                     .HasForeignKey(d => d.CompetitionIdFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Contestants_Competitions");
+            });
+
+            modelBuilder.Entity<CompetitionResults>(entity =>
+            {
+                entity.HasKey(e => e.Name);
             });
 
             OnModelCreatingPartial(modelBuilder);

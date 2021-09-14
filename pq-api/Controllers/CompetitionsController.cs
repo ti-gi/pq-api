@@ -9,7 +9,7 @@ using pq_api.data.Models;
 
 namespace pqWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class CompetitionsController : ControllerBase
     {
@@ -21,14 +21,14 @@ namespace pqWebApi.Controllers
         }
 
         // GET: api/Competitions
-        [HttpGet]
+        [HttpGet("competitions")]
         public async Task<ActionResult<IEnumerable<Competition>>> GetCompetitions()
         {
             return await _context.Competitions.ToListAsync();
         }
 
         // GET: api/Competitions/5
-        [HttpGet("{id}")]
+        [HttpGet("competitions/{id}")]
         public async Task<ActionResult<Competition>> GetCompetition(int id)
         {
             var competition = await _context.Competitions.FindAsync(id);
@@ -41,9 +41,26 @@ namespace pqWebApi.Controllers
             return competition;
         }
 
+        // GET: api/Competitions/5
+        [HttpGet("competitions-results/{id}")]
+        public  IEnumerable<CompetitionResults> GetCompetitionResults(int id)
+        {
+            var results = _context.CompetitionResults.FromSqlRaw("Get_CompetitonResults @p0", "1").ToList();
+
+            var rtn = new List<CompetitionResults>();
+
+            foreach (var r in results)
+            {
+                rtn.Add(new CompetitionResults { Name = r.Name, Points = r.Points});
+            }
+
+            return rtn;
+
+        }
+
         // PUT: api/Competitions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("competitions/{id}")]
         public async Task<IActionResult> PutCompetition(int id, Competition competition)
         {
             if (id != competition.CompetitionIdPk)
@@ -84,7 +101,7 @@ namespace pqWebApi.Controllers
         }
 
         // DELETE: api/Competitions/5
-        [HttpDelete("{id}")]
+        [HttpDelete("competitions{id}")]
         public async Task<IActionResult> DeleteCompetition(int id)
         {
             var competition = await _context.Competitions.FindAsync(id);
