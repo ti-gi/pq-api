@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using pq_api.data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace pq_api
 {
@@ -31,6 +33,8 @@ namespace pq_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<pqsightcom_dev_core_1Context>(opts => opts.UseSqlServer(Configuration["ConnectionString:pqDB"]));
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
