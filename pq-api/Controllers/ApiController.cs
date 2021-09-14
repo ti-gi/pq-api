@@ -21,7 +21,7 @@ namespace pq_api.Controllers
         {
             return Ok(new
             {
-                Message = "Hello from a public endpoint! You don't need to be authenticated to see this."
+                Message = "Hello from a public endpoint! You don't need to be authenticated to see this. At all!"
             });
         }
 
