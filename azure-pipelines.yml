@@ -39,5 +39,5 @@ steps:
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'resource'
-    appName: 'pipelines-net-core'
+    appName: 'test-api-test'
     package: $(Build.ArtifactStagingDirectory)/**/*.zip   
