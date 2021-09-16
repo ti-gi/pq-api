@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pq_api.data.Models;
+using M = pq_api.Models;
 
 namespace pqWebApi.Controllers
 {
@@ -22,9 +24,20 @@ namespace pqWebApi.Controllers
 
         // GET: api/Competitions
         [HttpGet("competitions")]
-        public async Task<ActionResult<IEnumerable<Competition>>> GetCompetitions()
+        [Authorize]
+        public IEnumerable<M.Competition> GetCompetitions()
         {
-            return await _context.Competitions.ToListAsync();
+            var results = _context.Competitions.ToList();
+            var rtn = new List<M.Competition>();
+
+            foreach (var r in results)
+            {
+                rtn.Add(new M.Competition { id = r.CompetitionIdPk, name = r.Name, ord = 1 });
+            }
+
+            return rtn;
+
+            
         }
 
         // GET: api/Competitions/5
