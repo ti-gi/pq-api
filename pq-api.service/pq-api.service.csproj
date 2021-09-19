@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>pq_api.service</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="BusinessModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\pq-api.data\pq-api.data.csproj" />
+  </ItemGroup>
+
+</Project>

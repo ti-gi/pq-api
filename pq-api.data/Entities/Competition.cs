@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace pq_api.data.Models
+namespace pq_api.data.Entities
 {
     public partial class Competition
     {

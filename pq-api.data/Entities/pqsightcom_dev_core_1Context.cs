@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace pq_api.data.Models
+namespace pq_api.data.Entities
 {
     public partial class pqsightcom_dev_core_1Context : DbContext
     {

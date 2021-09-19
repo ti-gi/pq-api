@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using pq_api.data.Models;
+using pq_api.data.Entities;
 using M = pq_api.Models;
+using B = pq_api.service.BusinessModels;
+using pq_api.service;
 
 namespace pqWebApi.Controllers
 {
@@ -15,11 +17,13 @@ namespace pqWebApi.Controllers
     [ApiController]
     public class CompetitionsController : ControllerBase
     {
-        private readonly pqsightcom_dev_core_1Context _context;
+        //private readonly pqsightcom_dev_core_1Context _context;
 
-        public CompetitionsController(pqsightcom_dev_core_1Context context)
+        private IAppService appService;
+
+        public CompetitionsController(IAppService appService)
         {
-            _context = context;
+            this.appService = appService;
         }
 
         // GET: api/Competitions
@@ -27,45 +31,55 @@ namespace pqWebApi.Controllers
         [Authorize]
         public IEnumerable<M.Competition> GetCompetitions()
         {
-            var results = _context.Competitions.ToList();
+            var results = appService.GetAllCompetitions();
             var rtn = new List<M.Competition>();
 
             foreach (var r in results)
             {
-                rtn.Add(new M.Competition { id = r.CompetitionIdPk, name = r.Name, ord = 1 });
+                rtn.Add(new M.Competition { id = r.Id, name = r.Name, ord = 1 });
             }
 
             return rtn;
+            //var results = _context.Competitions.ToList();
+            //var rtn = new List<M.Competition>();
+
+            //foreach (var r in results)
+            //{
+            //    rtn.Add(new M.Competition { id = r.CompetitionIdPk, name = r.Name, ord = 1 });
+            //}
+
+            //return rtn;
 
             
         }
 
         // GET: api/Competitions/5
         [HttpGet("competitions/{id}")]
-        public async Task<ActionResult<Competition>> GetCompetition(int id)
+        public M.Competition GetCompetition(int id)
         {
-            var competition = await _context.Competitions.FindAsync(id);
-
-            if (competition == null)
+            var competition = appService.GetCompetition(id);
+            return new M.Competition
             {
-                return NotFound();
-            }
+                id = competition.Id,
+                name = competition.Name
 
-            return competition;
+            };
+            //return new M.Competition { id = 5, name = "aaaa", ord = 1 } ;
         }
 
         // GET: api/Competitions/5
-        [HttpGet("competitions-results/{id}")]
-        public  IEnumerable<CompetitionResults> GetCompetitionResults(int id)
+        [HttpGet("competitions/{id}/competition-results")]
+        public  IEnumerable<M.CompetitionResult> GetCompetitionResults(int id)
         {
-            var results = _context.CompetitionResults.FromSqlRaw("Get_CompetitonResults @p0", "1").ToList();
+            //var results = _context.CompetitionResults.FromSqlRaw("Get_CompetitonResults @p0", "1").ToList();
 
-            var rtn = new List<CompetitionResults>();
-
-            foreach (var r in results)
-            {
-                rtn.Add(new CompetitionResults { Name = r.Name, Points = r.Points});
-            }
+            var rtn = new List<M.CompetitionResult>();
+            rtn.Add(new M.CompetitionResult { Contestant = "aaa", Points = 5 });
+            rtn.Add(new M.CompetitionResult { Contestant = "bbbb", Points = 6 });
+            //foreach (var r in results)
+            //{
+            //    rtn.Add(
+            //}
 
             return rtn;
 
@@ -73,65 +87,115 @@ namespace pqWebApi.Controllers
 
         // PUT: api/Competitions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("competitions/{id}")]
-        public async Task<IActionResult> PutCompetition(int id, Competition competition)
+        //[HttpPut("competitions/{id}")]
+        //public async Task<IActionResult> PutCompetition(int id, Competition competition)
+        //{
+        //    if (id != competition.CompetitionIdPk)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    _context.Entry(competition).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!CompetitionExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
+
+        //// POST: api/Competitions
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Competition>> PostCompetition(Competition competition)
+        //{
+        //    _context.Competitions.Add(competition);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetCompetition", new { id = competition.CompetitionIdPk }, competition);
+        //}
+        [Authorize]
+        [HttpPost("competitions/add")]
+        public M.Competition CreateCompetition(M.CompetitionCreate c)
         {
-            if (id != competition.CompetitionIdPk)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(competition).State = EntityState.Modified;
-
-            try
+            var addedCompetition = appService.AddCompetition(new B.Competition { Name = c.Name });
+            return new M.Competition
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompetitionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                id = addedCompetition.Id,
+                name = addedCompetition.Name,
+                ord = 1
+            };
 
-            return NoContent();
         }
 
-        // POST: api/Competitions
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Competition>> PostCompetition(Competition competition)
+        [Authorize]
+        [HttpPost("competitions/update")]
+        public M.Competition UpdateCompetition(M.CompetitionUpdate c)
         {
-            _context.Competitions.Add(competition);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCompetition", new { id = competition.CompetitionIdPk }, competition);
-        }
-
-        // DELETE: api/Competitions/5
-        [HttpDelete("competitions{id}")]
-        public async Task<IActionResult> DeleteCompetition(int id)
-        {
-            var competition = await _context.Competitions.FindAsync(id);
-            if (competition == null)
+            var updatedCompetition = appService.EditCompetition(new B.Competition { Id = c.Id, Name = c.Name });
+            return new M.Competition
             {
-                return NotFound();
-            }
+                id = updatedCompetition.Id,
+                name = updatedCompetition.Name
 
-            _context.Competitions.Remove(competition);
-            await _context.SaveChangesAsync();
+            };
+            //return new M.Competition { id = 5, name = "aaaa", ord = 1 };
+            //var updatedCompetition = appService.EditCompetition(new B.Competition { Id = c.Id, Name = c.Name });
+            //return new M.Competition
+            //{
+            //    id = updatedCompetition.Id,
+            //    name = updatedCompetition.Name
 
-            return NoContent();
+            //};
+
         }
 
-        private bool CompetitionExists(int id)
+        [Authorize]
+        [HttpGet("competitions/{competitionId}/contestants")]
+        public object GetContestants(int competitionId)
         {
-            return _context.Competitions.Any(e => e.CompetitionIdPk == id);
+            IEnumerable<M.Contestant> rtn = appService.GetContestantsForCompetition(competitionId).Select(q => new M.Contestant
+            {
+                id = q.Id,
+                competitionId = q.CompetitionId,
+                name = q.Name
+            });
+
+            return rtn;
         }
+
+        //// DELETE: api/Competitions/5
+        //[HttpDelete("competitions{id}")]
+        //public async Task<IActionResult> DeleteCompetition(int id)
+        //{
+        //    var competition = await _context.Competitions.FindAsync(id);
+        //    if (competition == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Competitions.Remove(competition);
+        //    await _context.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
+        //private bool CompetitionExists(int id)
+        //{
+        //    return _context.Competitions.Any(e => e.CompetitionIdPk == id);
+        //}
     }
 }

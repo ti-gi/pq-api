@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\pq-api.data\pq-api.data.csproj" />
+    <ProjectReference Include="..\pq-api.service\pq-api.service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

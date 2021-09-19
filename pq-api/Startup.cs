@@ -16,8 +16,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using pq_api.data.Models;
+using pq_api.data.Repositories;
+using pq_api.data.Entities;
 using Microsoft.EntityFrameworkCore;
+using pq_api.service;
 
 namespace pq_api
 {
@@ -73,6 +75,10 @@ namespace pq_api
             services.AddHttpContextAccessor();
 
             services.AddControllers();
+            services.AddTransient<IAppService, AppService>();
+            services.AddTransient<ICompetitionRepository, CompetitionRepository>();
+            services.AddTransient<IContestantRepository, ContestantRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "pq_api", Version = "v1" });

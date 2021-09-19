@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace pq_api.data.Models
+namespace pq_api.data.Entities
 {
     public class CompetitionResults
     {
