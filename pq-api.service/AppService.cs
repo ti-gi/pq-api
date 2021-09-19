@@ -14,15 +14,15 @@ namespace pq_api.service
     {
         private ICompetitionRepository competitionRepository;
         private IContestantRepository contestantRepository;
-        //private IQuizRepository quizRepository;
+        private IQuizRepository quizRepository;
         //private IQuestionRepository questionRepository;
         //private IRoundRepository roundRepository;
 
-        public AppService(ICompetitionRepository competitionRepository, IContestantRepository contestantRepository)//, IQuizRepository quizRepository, IQuestionRepository questionRepository, IRoundRepository roundRepository)
+        public AppService(ICompetitionRepository competitionRepository, IContestantRepository contestantRepository, IQuizRepository quizRepository)//, IQuestionRepository questionRepository, IRoundRepository roundRepository)
         {
             this.competitionRepository = competitionRepository;
             this.contestantRepository = contestantRepository;
-            //this.quizRepository = quizRepository;
+            this.quizRepository = quizRepository;
             //this.questionRepository = questionRepository;
             //this.roundRepository = roundRepository;
         }
@@ -72,17 +72,17 @@ namespace pq_api.service
 
         #region Quiz
 
-        //public IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId)
-        //{
-        //    IEnumerable<B.Quiz> rtn = quizRepository.GetQuizzesForCompetition(CompetitionId).Select(q => new B.Quiz
-        //    {
-        //        Id = q.Quiz_ID_PK,
-        //        CompetitionId = q.Competition_ID_FK,
-        //        Name = q.Name
-        //    });
+        public IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId)
+        {
+            IEnumerable<B.Quiz> rtn = quizRepository.GetQuizzesForCompetition(CompetitionId).Select(q => new B.Quiz
+            {
+                Id = q.QuizIdPk,
+                CompetitionId = q.CompetitionIdFk,
+                Name = q.Name
+            });
 
-        //    return rtn;
-        //}
+            return rtn;
+        }
 
         //public IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId)
         //{
@@ -96,26 +96,26 @@ namespace pq_api.service
         //    return rtn;
         //}
 
-        //public B.Quiz GetQuiz(int QuizId)
-        //{
-        //    var quiz = quizRepository.Get(QuizId);
-        //    B.Quiz rtn = new B.Quiz { Id = quiz.Quiz_ID_PK, Name = quiz.Name, CompetitionId = quiz.Competition_ID_FK };
-        //    return rtn;
-        //}
+        public B.Quiz GetQuiz(int QuizId)
+        {
+            var quiz = quizRepository.Get(QuizId);
+            B.Quiz rtn = new B.Quiz { Id = quiz.QuizIdPk, Name = quiz.Name, CompetitionId = quiz.CompetitionIdFk };
+            return rtn;
+        }
 
-        //public B.Quiz AddQuiz(B.Quiz quiz)
-        //{
-        //    var addedQuiz = quizRepository.Add(new E.Quiz { Name = quiz.Name, Competition_ID_FK = quiz.CompetitionId });
-        //    B.Quiz rtn = new B.Quiz { Id = addedQuiz.Quiz_ID_PK, Name = addedQuiz.Name, CompetitionId = addedQuiz.Competition_ID_FK };
-        //    return rtn;
-        //}
+        public B.Quiz AddQuiz(B.Quiz quiz)
+        {
+            var addedQuiz = quizRepository.Add(new E.Quiz { Name = quiz.Name, CompetitionIdFk = quiz.CompetitionId });
+            B.Quiz rtn = new B.Quiz { Id = addedQuiz.QuizIdPk, Name = addedQuiz.Name, CompetitionId = addedQuiz.CompetitionIdFk };
+            return rtn;
+        }
 
-        //public B.Quiz EditQuiz(B.Quiz quiz)
-        //{
-        //    var updatedQuiz = quizRepository.Update(new E.Quiz { Quiz_ID_PK = quiz.Id, Name = quiz.Name, Competition_ID_FK = quiz.CompetitionId });
-        //    B.Quiz rtn = new B.Quiz { Id = updatedQuiz.Quiz_ID_PK, Name = updatedQuiz.Name, CompetitionId = updatedQuiz.Competition_ID_FK };
-        //    return rtn;
-        //}
+        public B.Quiz EditQuiz(B.Quiz quiz)
+        {
+            var updatedQuiz = quizRepository.Update(new E.Quiz { QuizIdPk = quiz.Id, Name = quiz.Name, CompetitionIdFk = quiz.CompetitionId });
+            B.Quiz rtn = new B.Quiz { Id = updatedQuiz.QuizIdPk, Name = updatedQuiz.Name, CompetitionId = updatedQuiz.CompetitionIdFk };
+            return rtn;
+        }
         #endregion Quiz
 
         //Rounds
@@ -249,7 +249,7 @@ namespace pq_api.service
         //        {
         //            var qc1 = questionRepository.Add(new E.QuestionCategory { Question_ID_FK = addedQuestion.Question_ID_PK, Category_ID_FK = item.Id });
         //        }
-                    
+
         //    }
 
         //    foreach (var item in existingQuestionCategories)
@@ -387,7 +387,7 @@ namespace pq_api.service
         //        Id = roundResult.RoundResult_ID_PK,
         //        RoundId = roundResult.Round_ID_FK,
         //        ContestantId = roundResult.Contestant_ID_FK,
-                
+
         //        Points1 = roundResult.Points1,
         //        Points2 = roundResult.Points2,
         //        Points3 = roundResult.Points3,
@@ -397,7 +397,7 @@ namespace pq_api.service
 
         //public IEnumerable<B.RoundResult> GetRoundResultsForRound(int RoundId)
         //{
-          
+
         //    IEnumerable<B.RoundResult> rtn = roundRepository.GetRoundResultsForRound(RoundId).Select(q => new B.RoundResult
         //    {
         //        Id = q.RoundResult_ID_PK,

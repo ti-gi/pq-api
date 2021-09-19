@@ -11,7 +11,7 @@ using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
 
-namespace pqWebApi.Controllers
+namespace pq_api.Controllers
 {
     [Route("api")]
     [ApiController]
@@ -168,6 +168,20 @@ namespace pqWebApi.Controllers
         public object GetContestants(int competitionId)
         {
             IEnumerable<M.Contestant> rtn = appService.GetContestantsForCompetition(competitionId).Select(q => new M.Contestant
+            {
+                id = q.Id,
+                competitionId = q.CompetitionId,
+                name = q.Name
+            });
+
+            return rtn;
+        }
+
+        [Authorize]
+        [HttpGet("competitions/{competitionId}/quizzes")]
+        public object GetQuizzes(int competitionId)
+        {
+            IEnumerable<M.Quiz> rtn = appService.GetQuizzesForCompetition(competitionId).Select(q => new M.Quiz
             {
                 id = q.Id,
                 competitionId = q.CompetitionId,

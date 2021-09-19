@@ -78,6 +78,7 @@ namespace pq_api
             services.AddTransient<IAppService, AppService>();
             services.AddTransient<ICompetitionRepository, CompetitionRepository>();
             services.AddTransient<IContestantRepository, ContestantRepository>();
+            services.AddTransient<IQuizRepository, QuizRepository>();
 
             services.AddSwaggerGen(c =>
             {

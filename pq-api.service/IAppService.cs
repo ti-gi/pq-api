@@ -16,11 +16,11 @@ namespace pq_api.service
         B.Competition EditCompetition(B.Competition competition);
         IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId);
 
-        //IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId);
+        IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId);
         IEnumerable<B.Contestant> GetContestantsForCompetition(int CompetitionId);
-        //B.Quiz GetQuiz(int QuizId);
-        //B.Quiz AddQuiz(B.Quiz quiz);
-        //B.Quiz EditQuiz(B.Quiz quiz);
+        B.Quiz GetQuiz(int QuizId);
+        B.Quiz AddQuiz(B.Quiz quiz);
+        B.Quiz EditQuiz(B.Quiz quiz);
 
         //IEnumerable<B.QuizResult> GetQuizResults(int QuizId);
         //IEnumerable<B.QuizResult> RefreshQuizResults(int QuizId);

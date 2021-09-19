@@ -11,7 +11,7 @@ using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
 
-namespace pqWebApi.Controllers
+namespace pq_api.Controllers
 {
     [Route("api")]
     [ApiController]

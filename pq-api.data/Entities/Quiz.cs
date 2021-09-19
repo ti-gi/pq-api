@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace pq_api.data.Entities
 {
-    public partial class Contestant
+    public partial class Quiz
     {
-        public Contestant()
+        public Quiz()
         {
             QuizResults = new HashSet<QuizResult>();
         }
 
-        public int ContestantIdPk { get; set; }
+        public int QuizIdPk { get; set; }
         public int CompetitionIdFk { get; set; }
         public string Name { get; set; }
 
