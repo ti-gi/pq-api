@@ -17,13 +17,17 @@ namespace pq_api.data.Entities
         {
         }
 
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Competition> Competitions { get; set; }
         public virtual DbSet<Contestant> Contestants { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuestionCategory> QuestionCategories { get; set; }
         public virtual DbSet<Quiz> Quizzes { get; set; }
         public virtual DbSet<QuizResult> QuizResults { get; set; }
+        public virtual DbSet<Round> Rounds { get; set; }
         public virtual DbSet<CompetitionResults> CompetitionResults { get; set; }
         public virtual DbSet<QuizResultFinal> QuizResultFinal { get; set; }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -37,6 +41,21 @@ namespace pq_api.data.Entities
         {
             modelBuilder.HasDefaultSchema("pqsightcom_tomislav")
                 .HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasKey(e => e.CategoryIdPk)
+                    .HasName("Category_ID_PK");
+
+                entity.ToTable("Categories", "dbo");
+
+                entity.Property(e => e.CategoryIdPk).HasColumnName("Category_ID_PK");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<Competition>(entity =>
             {
@@ -79,6 +98,58 @@ namespace pq_api.data.Entities
             modelBuilder.Entity<QuizResultFinal>(entity =>
             {
                 entity.HasKey(e => e.Name);
+            });
+
+            modelBuilder.Entity<Question>(entity =>
+            {
+                entity.HasKey(e => e.QuestionIdPk);
+
+                entity.ToTable("Questions", "dbo");
+
+                entity.Property(e => e.QuestionIdPk).HasColumnName("Question_ID_PK");
+
+                entity.Property(e => e.Answer)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Question1)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnName("Question");
+
+                entity.Property(e => e.RoundIdFk).HasColumnName("Round_ID_FK");
+
+                entity.HasOne(d => d.RoundIdFkNavigation)
+                    .WithMany(p => p.Questions)
+                    .HasForeignKey(d => d.RoundIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Questions_Rounds");
+            });
+
+            modelBuilder.Entity<QuestionCategory>(entity =>
+            {
+                entity.HasKey(e => e.QuestionCategoryIdPk)
+                    .HasName("QuestionCategory_ID_PK");
+
+                entity.ToTable("QuestionCategories", "dbo");
+
+                entity.Property(e => e.QuestionCategoryIdPk).HasColumnName("QuestionCategory_ID_PK");
+
+                entity.Property(e => e.CategoryIdFk).HasColumnName("Category_ID_FK");
+
+                entity.Property(e => e.QuestionIdFk).HasColumnName("Question_ID_FK");
+
+                entity.HasOne(d => d.CategoryIdFkNavigation)
+                    .WithMany(p => p.QuestionCategories)
+                    .HasForeignKey(d => d.CategoryIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_QuestionCategories_Categories");
+
+                entity.HasOne(d => d.QuestionIdFkNavigation)
+                    .WithMany(p => p.QuestionCategories)
+                    .HasForeignKey(d => d.QuestionIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_QuestionCategories_Questions");
             });
 
             modelBuilder.Entity<Quiz>(entity =>
@@ -165,6 +236,27 @@ namespace pq_api.data.Entities
                     .HasForeignKey(d => d.QuizIdFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_QuizResults_Quiz");
+            });
+
+            modelBuilder.Entity<Round>(entity =>
+            {
+                entity.HasKey(e => e.RoundIdPk);
+
+                entity.ToTable("Rounds", "dbo");
+
+                entity.Property(e => e.RoundIdPk).HasColumnName("Round_ID_PK");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.QuizIdFk).HasColumnName("Quiz_ID_FK");
+
+                entity.HasOne(d => d.QuizIdFkNavigation)
+                    .WithMany(p => p.Rounds)
+                    .HasForeignKey(d => d.QuizIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Rounds_Quizzes");
             });
 
             OnModelCreatingPartial(modelBuilder);

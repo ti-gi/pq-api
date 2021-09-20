@@ -8,7 +8,7 @@ using pq_api.data.Entities;
 
 namespace pq_api.data.Repositories
 {
-    public interface IQuizRepository : IRepository<Quiz>//, IQuizResultRepository
+    public interface IQuizRepository : IRepository<Quiz>, IQuizResultRepository
     {
         IEnumerable<Quiz> GetQuizzesForCompetition(int CompetitionId);
         //IEnumerable<Round> GetRoundsForQuiz(int QuizId);

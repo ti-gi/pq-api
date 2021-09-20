@@ -90,7 +90,163 @@ namespace pq_api.Controllers
 
             return rtn;
         }
-        
+
+        [Authorize]
+        [HttpGet("quizzes/{QuizId}/quizresults")]
+        public IEnumerable<M.QuizResult> GetQuizResults(int QuizId)
+        {
+            var results = appService.GetQuizResults(QuizId);
+            var rtn = new List<M.QuizResult>();
+
+            foreach (var r in results)
+            {
+                rtn.Add(new M.QuizResult
+                {
+                    Id = r.Id,
+                    QuizId = r.QuizId,
+                    ContestantId = r.ContestantId,
+                    Contestant = r.Contestant,
+
+                    Round1Points = r.Round1Points,
+                    PointsAfterRound1 = r.PointsAfterRound1,
+                    RoundResult1Id = r.RoundResult1Id,
+
+                    Round2Points = r.Round2Points,
+                    PointsAfterRound2 = r.PointsAfterRound2,
+                    RoundResult2Id = r.RoundResult2Id,
+
+                    Round3Points = r.Round3Points,
+                    PointsAfterRound3 = r.PointsAfterRound3,
+                    RoundResult3Id = r.RoundResult3Id,
+
+                    Round4Points = r.Round4Points,
+                    PointsAfterRound4 = r.PointsAfterRound4,
+                    RoundResult4Id = r.RoundResult4Id
+                });
+            }
+
+            return rtn;
+        }
+
+        [Authorize]
+        [HttpPost("quizzes/{QuizId}/add-quiz-results")]
+        public IEnumerable<M.QuizResult> AddQuizResults(IEnumerable<M.QuizResult> quizResults)
+        {
+            var res = quizResults.Select(r => new B.QuizResult
+            {
+                Id = r.Id,
+                QuizId = r.QuizId,
+                ContestantId = r.ContestantId,
+                Contestant = r.Contestant,
+
+                Round1Points = r.Round1Points,
+                PointsAfterRound1 = r.PointsAfterRound1,
+                RoundResult1Id = r.RoundResult1Id,
+
+                Round2Points = r.Round2Points,
+                PointsAfterRound2 = r.PointsAfterRound2,
+                RoundResult2Id = r.RoundResult2Id,
+
+                Round3Points = r.Round3Points,
+                PointsAfterRound3 = r.PointsAfterRound3,
+                RoundResult3Id = r.RoundResult3Id,
+
+                Round4Points = r.Round4Points,
+                PointsAfterRound4 = r.PointsAfterRound4,
+                RoundResult4Id = r.RoundResult4Id
+            }).ToList();
+
+            var results = appService.AddQuizResults(res);
+            var rtn = new List<M.QuizResult>();
+
+            foreach (var r in results)
+            {
+                rtn.Add(new M.QuizResult
+                {
+                    Id = r.Id,
+                    QuizId = r.QuizId,
+                    ContestantId = r.ContestantId,
+
+                    Round1Points = r.Round1Points,
+                    PointsAfterRound1 = r.PointsAfterRound1,
+                    RoundResult1Id = r.RoundResult1Id,
+
+                    Round2Points = r.Round2Points,
+                    PointsAfterRound2 = r.PointsAfterRound2,
+                    RoundResult2Id = r.RoundResult2Id,
+
+                    Round3Points = r.Round3Points,
+                    PointsAfterRound3 = r.PointsAfterRound3,
+                    RoundResult3Id = r.RoundResult3Id,
+
+                    Round4Points = r.Round4Points,
+                    PointsAfterRound4 = r.PointsAfterRound4,
+                    RoundResult4Id = r.RoundResult4Id
+                });
+            }
+
+            return rtn;
+        }
+
+        [Authorize]
+        [HttpPost("quizzes/{QuizId}/update-quiz-results")]
+        public IEnumerable<M.QuizResult> UpdateQuizResults(IEnumerable<M.QuizResult> quizResults)
+        {
+            var res = quizResults.Select(r => new B.QuizResult
+            {
+                Id = r.Id,
+                QuizId = r.QuizId,
+                ContestantId = r.ContestantId,
+
+                Round1Points = r.Round1Points,
+                PointsAfterRound1 = r.PointsAfterRound1,
+                RoundResult1Id = r.RoundResult1Id,
+
+                Round2Points = r.Round2Points,
+                PointsAfterRound2 = r.PointsAfterRound2,
+                RoundResult2Id = r.RoundResult2Id,
+
+                Round3Points = r.Round3Points,
+                PointsAfterRound3 = r.PointsAfterRound3,
+                RoundResult3Id = r.RoundResult3Id,
+
+                Round4Points = r.Round4Points,
+                PointsAfterRound4 = r.PointsAfterRound4,
+                RoundResult4Id = r.RoundResult4Id
+            }).ToList();
+
+            var results = appService.UpdateQuizResults(res);
+            var rtn = new List<M.QuizResult>();
+
+            foreach (var r in results)
+            {
+                rtn.Add(new M.QuizResult
+                {
+                    Id = r.Id,
+                    QuizId = r.QuizId,
+                    ContestantId = r.ContestantId,
+
+                    Round1Points = r.Round1Points,
+                    PointsAfterRound1 = r.PointsAfterRound1,
+                    RoundResult1Id = r.RoundResult1Id,
+
+                    Round2Points = r.Round2Points,
+                    PointsAfterRound2 = r.PointsAfterRound2,
+                    RoundResult2Id = r.RoundResult2Id,
+
+                    Round3Points = r.Round3Points,
+                    PointsAfterRound3 = r.PointsAfterRound3,
+                    RoundResult3Id = r.RoundResult3Id,
+
+                    Round4Points = r.Round4Points,
+                    PointsAfterRound4 = r.PointsAfterRound4,
+                    RoundResult4Id = r.RoundResult4Id
+                });
+            }
+
+            return rtn;
+        }
+
 
     }
 }

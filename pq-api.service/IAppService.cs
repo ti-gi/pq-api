@@ -22,10 +22,10 @@ namespace pq_api.service
         B.Quiz AddQuiz(B.Quiz quiz);
         B.Quiz EditQuiz(B.Quiz quiz);
 
-        //IEnumerable<B.QuizResult> GetQuizResults(int QuizId);
+        IEnumerable<B.QuizResult> GetQuizResults(int QuizId);
         //IEnumerable<B.QuizResult> RefreshQuizResults(int QuizId);
-        //IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults);
-        //IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
+        IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults);
+        IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
         IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
 
         //B.Round GetRound(int RoundId);

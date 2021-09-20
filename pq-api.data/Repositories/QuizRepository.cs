@@ -75,43 +75,43 @@ namespace pq_api.data.Repositories
 
         //#region  QuizResults
 
-        //public IEnumerable<QuizResult> GetQuizResults(int QuizId)
-        //{
-        //    return pqEntities.QuizResults.Where(qr => qr.Quiz_ID_FK == QuizId).ToList();
-        //}
+        public IEnumerable<QuizResult> GetQuizResults(int QuizId)
+        {
+            return pqEntities.QuizResults.Include( q => q.ContestantIdFkNavigation).Where(qr => qr.QuizIdFk == QuizId).ToList();
+        }
 
         //public IEnumerable<QuizResult> RefreshQuizResults(int QuizId)
         //{
         //    return pqEntities.Refresh_QuizResults(QuizId);
         //}
 
-        //public QuizResult AddQuizResult(QuizResult entity)
-        //{
-        //    pqEntities.QuizResults.Add(entity);
-        //    pqEntities.SaveChanges();
-        //    return entity;
-        //}
+        public QuizResult AddQuizResult(QuizResult entity)
+        {
+            pqEntities.QuizResults.Add(entity);
+            pqEntities.SaveChanges();
+            return entity;
+        }
 
-        //public QuizResult UpdateQuizResult(QuizResult entity)
-        //{
-        //    var existingQuizResult = pqEntities.QuizResults.Where(q => q.QuizResult_ID_PK == entity.QuizResult_ID_PK).FirstOrDefault();
-        //    if (existingQuizResult != null)
-        //    {
-        //        existingQuizResult.Round_1_Points = entity.Round_1_Points;
-        //        existingQuizResult.PointsAfterRound_1 = entity.PointsAfterRound_1;
+        public QuizResult UpdateQuizResult(QuizResult entity)
+        {
+            var existingQuizResult = pqEntities.QuizResults.Where(q => q.QuizResultIdPk == entity.QuizResultIdPk).FirstOrDefault();
+            if (existingQuizResult != null)
+            {
+                existingQuizResult.Round1Points = entity.Round1Points;
+                existingQuizResult.PointsAfterRound1 = entity.PointsAfterRound1;
 
-        //        existingQuizResult.Round_2_Points = entity.Round_2_Points;
-        //        existingQuizResult.PointsAfterRound_2 = entity.PointsAfterRound_2;
+                existingQuizResult.Round2Points = entity.Round2Points;
+                existingQuizResult.PointsAfterRound2 = entity.PointsAfterRound2;
 
-        //        existingQuizResult.Round_3_Points = entity.Round_3_Points;
-        //        existingQuizResult.PointsAfterRound_3 = entity.PointsAfterRound_3;
+                existingQuizResult.Round3Points = entity.Round3Points;
+                existingQuizResult.PointsAfterRound3 = entity.PointsAfterRound3;
 
-        //        existingQuizResult.Round_4_Points = entity.Round_4_Points;
-        //        existingQuizResult.PointsAfterRound_4 = entity.PointsAfterRound_4;
-        //    }
-        //    pqEntities.SaveChanges();
-        //    return existingQuizResult;
-        //}
+                existingQuizResult.Round4Points = entity.Round4Points;
+                existingQuizResult.PointsAfterRound4 = entity.PointsAfterRound4;
+            }
+            pqEntities.SaveChanges();
+            return existingQuizResult;
+        }
 
         public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
         {

@@ -413,34 +413,34 @@ namespace pq_api.service
         //}
 
         ////QuizResults
-        //public IEnumerable<B.QuizResult> GetQuizResults(int QuizId)
-        //{
-        //    IEnumerable<B.QuizResult> rtn = quizRepository.GetQuizResults(QuizId).Select(qr => new B.QuizResult
-        //    {
-        //        Id = qr.QuizResult_ID_PK,
-        //        QuizId = qr.Quiz_ID_FK,
-        //        ContestantId = qr.Contestant_ID_FK,
-        //        Contestant = qr.Contestant.Name,
+        public IEnumerable<B.QuizResult> GetQuizResults(int QuizId)
+        {
+            IEnumerable<B.QuizResult> rtn = quizRepository.GetQuizResults(QuizId).Select(qr => new B.QuizResult
+            {
+                Id = qr.QuizResultIdPk,
+                QuizId = qr.QuizIdFk,
+                ContestantId = qr.ContestantIdFk,
+                Contestant = qr.ContestantIdFkNavigation.Name,
 
-        //        Round1Points = qr.Round_1_Points,
-        //        PointsAfterRound1 = qr.PointsAfterRound_1,
-        //        RoundResult1Id = qr.RoundResult_1_ID_FK,
+                Round1Points = qr.Round1Points,
+                PointsAfterRound1 = qr.PointsAfterRound1,
+                RoundResult1Id = qr.RoundResult1IdFk,
 
-        //        Round2Points = qr.Round_2_Points,
-        //        PointsAfterRound2 = qr.PointsAfterRound_2,
-        //        RoundResult2Id = qr.RoundResult_2_ID_FK,
+                Round2Points = qr.Round2Points,
+                PointsAfterRound2 = qr.PointsAfterRound2,
+                RoundResult2Id = qr.RoundResult2IdFk,
 
-        //        Round3Points = qr.Round_3_Points,
-        //        PointsAfterRound3 = qr.PointsAfterRound_3,
-        //        RoundResult3Id = qr.RoundResult_3_ID_FK,
+                Round3Points = qr.Round3Points,
+                PointsAfterRound3 = qr.PointsAfterRound3,
+                RoundResult3Id = qr.RoundResult3IdFk,
 
-        //        Round4Points = qr.Round_4_Points,
-        //        PointsAfterRound4 = qr.PointsAfterRound_4,
-        //        RoundResult4Id = qr.RoundResult_4_ID_FK
-        //    });
+                Round4Points = qr.Round4Points,
+                PointsAfterRound4 = qr.PointsAfterRound4,
+                RoundResult4Id = qr.RoundResult4IdFk
+            });
 
-        //    return rtn;
-        //}
+            return rtn;
+        }
 
         //public IEnumerable<B.QuizResult> RefreshQuizResults(int QuizId)
         //{
@@ -470,78 +470,78 @@ namespace pq_api.service
         //    return rtn;
         //}
 
-        //public IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults)
-        //{
-        //    List<B.QuizResult> rtn = new List<B.QuizResult>();
+        public IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults)
+        {
+            List<B.QuizResult> rtn = new List<B.QuizResult>();
 
-        //    foreach (var result in QuizResults)
-        //    {
-        //        var contestantId = contestantRepository.GetByName(result.Contestant).Contestant_ID_PK;
-        //        var res = quizRepository.AddQuizResult(new E.QuizResult
-        //        {
-        //            //QuizResult_ID_PK = result.Id,
-        //            Contestant_ID_FK = contestantId,
-        //            Quiz_ID_FK = result.QuizId,
-        //            Round_1_Points = result.Round1Points,
-        //            Round_2_Points = result.Round2Points,
-        //            Round_3_Points = result.Round3Points,
-        //            Round_4_Points = result.Round4Points,
-        //            PointsAfterRound_1 = result.PointsAfterRound1,
-        //            PointsAfterRound_2 = result.PointsAfterRound2,
-        //            PointsAfterRound_3 = result.PointsAfterRound3,
-        //            PointsAfterRound_4 = result.PointsAfterRound4
-        //        });
+            foreach (var result in QuizResults)
+            {
+                var contestantId = contestantRepository.GetByName(result.Contestant).ContestantIdPk;
+                var res = quizRepository.AddQuizResult(new E.QuizResult
+                {
+                    //QuizResult_ID_PK = result.Id,
+                    ContestantIdFk = contestantId,
+                    QuizIdFk = result.QuizId,
+                    Round1Points = result.Round1Points,
+                    Round2Points = result.Round2Points,
+                    Round3Points = result.Round3Points,
+                    Round4Points = result.Round4Points,
+                    PointsAfterRound1 = result.PointsAfterRound1,
+                    PointsAfterRound2 = result.PointsAfterRound2,
+                    PointsAfterRound3 = result.PointsAfterRound3,
+                    PointsAfterRound4 = result.PointsAfterRound4
+                });
 
-        //        rtn.Add(new B.QuizResult
-        //        {
-        //            Id = res.QuizResult_ID_PK,
-        //            Round1Points = res.Round_1_Points,
-        //            Round2Points = res.Round_2_Points,
-        //            Round3Points = res.Round_3_Points,
-        //            Round4Points = res.Round_4_Points,
-        //            PointsAfterRound1 = res.PointsAfterRound_1,
-        //            PointsAfterRound2 = res.PointsAfterRound_2,
-        //            PointsAfterRound3 = res.PointsAfterRound_3,
-        //            PointsAfterRound4 = res.PointsAfterRound_4
-        //        });
-        //    }
-        //    return rtn;
-        //}
+                rtn.Add(new B.QuizResult
+                {
+                    Id = res.QuizResultIdPk,
+                    Round1Points = res.Round1Points,
+                    Round2Points = res.Round2Points,
+                    Round3Points = res.Round3Points,
+                    Round4Points = res.Round4Points,
+                    PointsAfterRound1 = res.PointsAfterRound1,
+                    PointsAfterRound2 = res.PointsAfterRound2,
+                    PointsAfterRound3 = res.PointsAfterRound3,
+                    PointsAfterRound4 = res.PointsAfterRound4
+                });
+            }
+            return rtn;
+        }
 
-        //public IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults)
-        //{
-        //    List<B.QuizResult> rtn = new List<B.QuizResult>();
+        public IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults)
+        {
+            List<B.QuizResult> rtn = new List<B.QuizResult>();
 
-        //    foreach (var result in QuizResults)
-        //    {
-        //        var res = quizRepository.UpdateQuizResult(new E.QuizResult
-        //        {
-        //            QuizResult_ID_PK = result.Id,
-        //            Round_1_Points = result.Round1Points,
-        //            Round_2_Points = result.Round2Points,
-        //            Round_3_Points = result.Round3Points,
-        //            Round_4_Points = result.Round4Points,
-        //            PointsAfterRound_1 = result.PointsAfterRound1,
-        //            PointsAfterRound_2 = result.PointsAfterRound2,
-        //            PointsAfterRound_3 = result.PointsAfterRound3,
-        //            PointsAfterRound_4 = result.PointsAfterRound4
-        //        });
+            foreach (var result in QuizResults)
+            {
+                var res = quizRepository.UpdateQuizResult(new E.QuizResult
+                {
+                    QuizResultIdPk = result.Id,
+                    Round1Points = result.Round1Points,
+                    Round2Points = result.Round2Points,
+                    Round3Points = result.Round3Points,
+                    Round4Points = result.Round4Points,
+                    PointsAfterRound1 = result.PointsAfterRound1,
+                    PointsAfterRound2 = result.PointsAfterRound2,
+                    PointsAfterRound3 = result.PointsAfterRound3,
+                    PointsAfterRound4 = result.PointsAfterRound4
+                });
 
-        //        rtn.Add(new B.QuizResult
-        //        {
-        //            Id = res.QuizResult_ID_PK,
-        //            Round1Points = res.Round_1_Points,
-        //            Round2Points = res.Round_2_Points,
-        //            Round3Points = res.Round_3_Points,
-        //            Round4Points = res.Round_4_Points,
-        //            PointsAfterRound1 = res.PointsAfterRound_1,
-        //            PointsAfterRound2 = res.PointsAfterRound_2,
-        //            PointsAfterRound3 = res.PointsAfterRound_3,
-        //            PointsAfterRound4 = res.PointsAfterRound_4
-        //        });
-        //    }
-        //    return rtn;
-        //}
+                rtn.Add(new B.QuizResult
+                {
+                    Id = res.QuizResultIdPk,
+                    Round1Points = res.Round1Points,
+                    Round2Points = res.Round2Points,
+                    Round3Points = res.Round3Points,
+                    Round4Points = res.Round4Points,
+                    PointsAfterRound1 = res.PointsAfterRound1,
+                    PointsAfterRound2 = res.PointsAfterRound2,
+                    PointsAfterRound3 = res.PointsAfterRound3,
+                    PointsAfterRound4 = res.PointsAfterRound4
+                });
+            }
+            return rtn;
+        }
 
         #region Contestant
         public IEnumerable<B.Contestant> GetContestantsForCompetition(int CompetitionId)

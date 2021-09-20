@@ -10,6 +10,7 @@ namespace pq_api.data.Entities
         public Quiz()
         {
             QuizResults = new HashSet<QuizResult>();
+            Rounds = new HashSet<Round>();
         }
 
         public int QuizIdPk { get; set; }
@@ -18,5 +19,6 @@ namespace pq_api.data.Entities
 
         public virtual Competition CompetitionIdFkNavigation { get; set; }
         public virtual ICollection<QuizResult> QuizResults { get; set; }
+        public virtual ICollection<Round> Rounds { get; set; }
     }
 }
