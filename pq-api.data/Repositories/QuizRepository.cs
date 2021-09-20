@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using Microsoft.EntityFrameworkCore;
 using pq_api.data.Entities;
 
 namespace pq_api.data.Repositories
@@ -112,10 +113,10 @@ namespace pq_api.data.Repositories
         //    return existingQuizResult;
         //}
 
-        //public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
-        //{
-        //    return pqEntities.Get_QuizResults(QuizId);
-        //}
+        public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
+        {
+            return pqEntities.QuizResultFinal.FromSqlRaw("Get_QuizResults @p0", QuizId).ToList();
+        }
 
 
         //#endregion

@@ -72,6 +72,25 @@ namespace pq_api.Controllers
 
         }
 
+        [Authorize]
+        [HttpGet("quizzes/{QuizId}/quiz-results-final")]
+        public IEnumerable<M.QuizResultFinal> CompetitionResults(int QuizId)
+        {
+            var results = appService.QuizResultsFinal(QuizId);
+            var rtn = new List<M.QuizResultFinal>();
+
+            foreach (var r in results)
+            {
+                rtn.Add(new M.QuizResultFinal
+                {
+                    Contestant = r.Contestant,
+                    Points = r.Points
+                });
+            }
+
+            return rtn;
+        }
+        
 
     }
 }

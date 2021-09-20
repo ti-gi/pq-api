@@ -26,7 +26,7 @@ namespace pq_api.service
         //IEnumerable<B.QuizResult> RefreshQuizResults(int QuizId);
         //IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults);
         //IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
-        //IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
+        IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
 
         //B.Round GetRound(int RoundId);
         //B.Round AddRound(B.Round entity);

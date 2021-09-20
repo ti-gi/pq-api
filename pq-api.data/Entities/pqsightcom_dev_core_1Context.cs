@@ -22,6 +22,8 @@ namespace pq_api.data.Entities
         public virtual DbSet<Quiz> Quizzes { get; set; }
         public virtual DbSet<QuizResult> QuizResults { get; set; }
         public virtual DbSet<CompetitionResults> CompetitionResults { get; set; }
+        public virtual DbSet<QuizResultFinal> QuizResultFinal { get; set; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -70,6 +72,11 @@ namespace pq_api.data.Entities
                     .HasConstraintName("FK_Contestants_Competitions");
             });
             modelBuilder.Entity<CompetitionResults>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+            });
+
+            modelBuilder.Entity<QuizResultFinal>(entity =>
             {
                 entity.HasKey(e => e.Name);
             });

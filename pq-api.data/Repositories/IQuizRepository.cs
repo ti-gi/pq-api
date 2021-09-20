@@ -12,6 +12,6 @@ namespace pq_api.data.Repositories
     {
         IEnumerable<Quiz> GetQuizzesForCompetition(int CompetitionId);
         //IEnumerable<Round> GetRoundsForQuiz(int QuizId);
-        //IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId);
+        IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId);
     }
 }

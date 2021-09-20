@@ -84,17 +84,17 @@ namespace pq_api.service
             return rtn;
         }
 
-        //public IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId)
-        //{
+        public IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId)
+        {
 
-        //    IEnumerable<B.QuizResultFinal> rtn = quizRepository.QuizResultsFinal(QuizId).Select(cr => new B.QuizResultFinal
-        //    {
-        //        Contestant = cr.Name,
-        //        Points = cr.Points
-        //    });
+            IEnumerable<B.QuizResultFinal> rtn = quizRepository.QuizResultsFinal(QuizId).Select(cr => new B.QuizResultFinal
+            {
+                Contestant = cr.Name,
+                Points = cr.Points
+            });
 
-        //    return rtn;
-        //}
+            return rtn;
+        }
 
         public B.Quiz GetQuiz(int QuizId)
         {

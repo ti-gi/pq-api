@@ -73,15 +73,30 @@ namespace pq_api.Controllers
         {
             //var results = _context.CompetitionResults.FromSqlRaw("Get_CompetitonResults @p0", "1").ToList();
 
+            var results = appService.CompetitionResults(id);
             var rtn = new List<M.CompetitionResult>();
-            rtn.Add(new M.CompetitionResult { Contestant = "aaa", Points = 5 });
-            rtn.Add(new M.CompetitionResult { Contestant = "bbbb", Points = 6 });
-            //foreach (var r in results)
-            //{
-            //    rtn.Add(
-            //}
+
+            foreach (var r in results)
+            {
+                rtn.Add(new M.CompetitionResult
+                {
+                    Contestant = r.Contestant,
+                    Points = r.Points
+                });
+            }
 
             return rtn;
+
+
+            //var rtn = new List<M.CompetitionResult>();
+            //rtn.Add(new M.CompetitionResult { Contestant = "aaa", Points = 5 });
+            //rtn.Add(new M.CompetitionResult { Contestant = "bbbb", Points = 6 });
+            ////foreach (var r in results)
+            ////{
+            ////    rtn.Add(
+            ////}
+
+            //return rtn;
 
         }
 
