@@ -73,6 +73,21 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
+        [HttpGet("quizzes/{QuizId}/rounds")]
+        public IEnumerable<M.Round> GetRounds(int QuizId)
+        {
+            var results = appService.GetRoundsForQuiz(QuizId).Select(r => new M.Round
+            {
+                id = r.Id,
+                quizId = r.QuizId,
+                name = r.Name
+
+            });
+
+            return results;
+        }
+
+        [Authorize]
         [HttpGet("quizzes/{QuizId}/quiz-results-final")]
         public IEnumerable<M.QuizResultFinal> CompetitionResults(int QuizId)
         {

@@ -16,15 +16,15 @@ namespace pq_api.service
         private IContestantRepository contestantRepository;
         private IQuizRepository quizRepository;
         //private IQuestionRepository questionRepository;
-        //private IRoundRepository roundRepository;
+        private IRoundRepository roundRepository;
 
-        public AppService(ICompetitionRepository competitionRepository, IContestantRepository contestantRepository, IQuizRepository quizRepository)//, IQuestionRepository questionRepository, IRoundRepository roundRepository)
+        public AppService(ICompetitionRepository competitionRepository, IContestantRepository contestantRepository, IQuizRepository quizRepository, IRoundRepository roundRepository)//, IQuestionRepository questionRepository, y)
         {
             this.competitionRepository = competitionRepository;
             this.contestantRepository = contestantRepository;
             this.quizRepository = quizRepository;
             //this.questionRepository = questionRepository;
-            //this.roundRepository = roundRepository;
+            this.roundRepository = roundRepository;
         }
 
         #region Competition
@@ -120,38 +120,38 @@ namespace pq_api.service
 
         //Rounds
 
-        //public B.Round GetRound(int RoundId)
-        //{
-        //    var round = roundRepository.Get(RoundId);
-        //    B.Round rtn = new B.Round { Id = round.Round_ID_PK, Name = round.Name, QuizId = round.Quiz_ID_FK };
-        //    return rtn;
-        //}
+        public B.Round GetRound(int RoundId)
+        {
+            var round = roundRepository.Get(RoundId);
+            B.Round rtn = new B.Round { Id = round.RoundIdPk, Name = round.Name, QuizId = round.QuizIdFk };
+            return rtn;
+        }
 
-        //public B.Round AddRound(B.Round round)
-        //{
-        //    var addedRound = roundRepository.Add(new E.Round { Name = round.Name, Quiz_ID_FK = round.QuizId });
-        //    B.Round rtn = new B.Round { Id = addedRound.Round_ID_PK, Name = addedRound.Name, QuizId = addedRound.Quiz_ID_FK };
-        //    return rtn;
-        //}
+        public B.Round AddRound(B.Round round)
+        {
+            var addedRound = roundRepository.Add(new E.Round { Name = round.Name, QuizIdFk = round.QuizId });
+            B.Round rtn = new B.Round { Id = addedRound.RoundIdPk, Name = addedRound.Name, QuizId = addedRound.QuizIdFk };
+            return rtn;
+        }
 
-        //public B.Round EditRound(B.Round round)
-        //{
-        //    var updatedRound = roundRepository.Update(new E.Round { Round_ID_PK = round.Id, Name = round.Name, Quiz_ID_FK = round.QuizId });
-        //    B.Round rtn = new B.Round { Id = updatedRound.Round_ID_PK, Name = updatedRound.Name, QuizId = updatedRound.Quiz_ID_FK };
-        //    return rtn;
-        //}
+        public B.Round EditRound(B.Round round)
+        {
+            var updatedRound = roundRepository.Update(new E.Round { RoundIdPk = round.Id, Name = round.Name, QuizIdFk = round.QuizId });
+            B.Round rtn = new B.Round { Id = updatedRound.RoundIdPk, Name = updatedRound.Name, QuizId = updatedRound.QuizIdFk };
+            return rtn;
+        }
 
-        //public IEnumerable<B.Round> GetRoundsForQuiz(int QuizId)
-        //{
-        //    IEnumerable<B.Round> rtn = quizRepository.GetRoundsForQuiz(QuizId).Select(q => new B.Round
-        //    {
-        //        Id = q.Round_ID_PK,
-        //        QuizId = q.Quiz_ID_FK,
-        //        Name = q.Name
-        //    });
+        public IEnumerable<B.Round> GetRoundsForQuiz(int QuizId)
+        {
+            IEnumerable<B.Round> rtn = quizRepository.GetRoundsForQuiz(QuizId).Select(q => new B.Round
+            {
+                Id = q.RoundIdPk,
+                QuizId = q.QuizIdFk,
+                Name = q.Name
+            });
 
-        //    return rtn;
-        //}
+            return rtn;
+        }
 
         //public IEnumerable<B.Question> GetQuestionsForRound(int RoundId)
         //{

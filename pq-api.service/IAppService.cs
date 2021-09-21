@@ -28,10 +28,10 @@ namespace pq_api.service
         IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
         IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
 
-        //B.Round GetRound(int RoundId);
-        //B.Round AddRound(B.Round entity);
-        //B.Round EditRound(B.Round entity);
-        //IEnumerable<B.Round> GetRoundsForQuiz(int QuizId);
+        B.Round GetRound(int RoundId);
+        B.Round AddRound(B.Round entity);
+        B.Round EditRound(B.Round entity);
+        IEnumerable<B.Round> GetRoundsForQuiz(int QuizId);
 
         //IEnumerable<B.Question> GetQuestionsForRound(int RoundId);
         //IEnumerable<B.Category> GetCategories();

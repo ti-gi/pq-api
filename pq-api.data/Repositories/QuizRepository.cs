@@ -67,10 +67,10 @@ namespace pq_api.data.Repositories
         #endregion
 
         //#region Round
-        //public IEnumerable<Round> GetRoundsForQuiz(int QuizId)
-        //{
-        //    return pqEntities.Rounds.Where(q => q.Quiz_ID_FK == QuizId).ToList();
-        //}
+        public IEnumerable<Round> GetRoundsForQuiz(int QuizId)
+        {
+            return pqEntities.Rounds.Where(q => q.QuizIdFk == QuizId).ToList();
+        }
         //#endregion
 
         //#region  QuizResults
