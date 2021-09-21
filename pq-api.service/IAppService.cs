@@ -33,13 +33,13 @@ namespace pq_api.service
         B.Round EditRound(B.Round entity);
         IEnumerable<B.Round> GetRoundsForQuiz(int QuizId);
 
-        //IEnumerable<B.Question> GetQuestionsForRound(int RoundId);
-        //IEnumerable<B.Category> GetCategories();
+        IEnumerable<B.Question> GetQuestionsForRound(int RoundId);
+        IEnumerable<B.Category> GetCategories();
         //IEnumerable<B.QuestionCategory> GetQuestionCategories(int id);
-        //B.Question AddQuestion(B.Question question);
-        //B.Question GetQuestion(int QuestionId);
+        B.Question AddQuestion(B.Question question);
+        B.Question GetQuestion(int QuestionId);
         //IEnumerable<B.Question> GetQuestions();
-        //B.Question EditQuestion(B.Question question);
+        B.Question EditQuestion(B.Question question);
 
         //B.RoundResult GetRoundResult(int roundResultId);
         //B.RoundResult AddRoundResult(B.RoundResult roundResult);

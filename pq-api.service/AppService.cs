@@ -15,16 +15,16 @@ namespace pq_api.service
         private ICompetitionRepository competitionRepository;
         private IContestantRepository contestantRepository;
         private IQuizRepository quizRepository;
-        //private IQuestionRepository questionRepository;
         private IRoundRepository roundRepository;
+        private IQuestionRepository questionRepository;
 
-        public AppService(ICompetitionRepository competitionRepository, IContestantRepository contestantRepository, IQuizRepository quizRepository, IRoundRepository roundRepository)//, IQuestionRepository questionRepository, y)
+        public AppService(ICompetitionRepository competitionRepository, IContestantRepository contestantRepository, IQuizRepository quizRepository, IRoundRepository roundRepository, IQuestionRepository questionRepository)
         {
             this.competitionRepository = competitionRepository;
             this.contestantRepository = contestantRepository;
             this.quizRepository = quizRepository;
-            //this.questionRepository = questionRepository;
             this.roundRepository = roundRepository;
+            this.questionRepository = questionRepository;
         }
 
         #region Competition
@@ -153,32 +153,32 @@ namespace pq_api.service
             return rtn;
         }
 
-        //public IEnumerable<B.Question> GetQuestionsForRound(int RoundId)
-        //{
-        //    IEnumerable<B.Question> rtn = questionRepository.GetQuestionsForRound(RoundId).Select(q => new B.Question
-        //    {
-        //        Id = q.Question_ID_PK,
-        //        RoundId = q.Round_ID_FK,
-        //        Question1 = q.Question1,
-        //        Answer = q.Answer,
-        //        Categories = q.QuestionCategories.Select(c => new B.Category { Id = c.Category.Category_ID_PK, Name = c.Category.Name }).ToList(),
-        //        QuestionDifficulty = q.QuestionDifficulty
+        public IEnumerable<B.Question> GetQuestionsForRound(int RoundId)
+        {
+            IEnumerable<B.Question> rtn = questionRepository.GetQuestionsForRound(RoundId).Select(q => new B.Question
+            {
+                Id = q.QuestionIdPk,
+                RoundId = q.RoundIdFk,
+                Question1 = q.Question1,
+                Answer = q.Answer,
+                Categories = q.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
+                QuestionDifficulty = q.QuestionDifficulty
 
-        //    });
+            });
 
-        //    return rtn;
-        //}
+            return rtn;
+        }
 
-        //public IEnumerable<B.Category> GetCategories()
-        //{
-        //    IEnumerable<B.Category> rtn = questionRepository.GetCategories().Select(c => new B.Category
-        //    {
-        //        Id = c.Category_ID_PK,
-        //        Name = c.Name
-        //    });
+        public IEnumerable<B.Category> GetCategories()
+        {
+            IEnumerable<B.Category> rtn = questionRepository.GetCategories().Select(c => new B.Category
+            {
+                Id = c.CategoryIdPk,
+                Name = c.Name
+            });
 
-        //    return rtn;
-        //}
+            return rtn;
+        }
 
         //public IEnumerable<B.QuestionCategory> GetQuestionCategories(int id)
         //{
@@ -193,106 +193,110 @@ namespace pq_api.service
         //    return rtn;
         //}
 
-        //public B.Question AddQuestion(B.Question question)
-        //{
-        //    var addedQuestion = questionRepository.Add(new E.Question { Question1 = question.Question1, Answer = question.Answer, Round_ID_FK = question.RoundId, QuestionDifficulty = question.QuestionDifficulty });
-        //    List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
-        //    List<B.Category> nonExistantCategories = new List<B.Category>();
-        //    foreach (var item in question.Categories.Where(q => q.Id == 0))//non existant categories - add them
-        //    {
-        //        var nec = questionRepository.Add(new E.Category { Name = item.Name });
-        //        nonExistantCategories.Add(new B.Category { Id = nec.Category_ID_PK, Name = nec.Name});
-        //    }
+        public B.Question AddQuestion(B.Question question)
+        {
+            var addedQuestion = questionRepository.Add(new E.Question { Question1 = question.Question1, Answer = question.Answer, RoundIdFk = question.RoundId, QuestionDifficulty = question.QuestionDifficulty });
+            List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
+            List<B.Category> nonExistantCategories = new List<B.Category>();
+            foreach (var item in question.Categories.Where(q => q.Id == 0))//non existant categories - add them
+            {
+                var nec = questionRepository.Add(new E.Category { Name = item.Name });
+                nonExistantCategories.Add(new B.Category { Id = nec.CategoryIdPk, Name = nec.Name });
+            }
 
-        //    foreach (var item in question.Categories.Where(q => q.Id != 0))
-        //    {
-        //        var qc1 = questionRepository.Add(new E.QuestionCategory { Question_ID_FK = addedQuestion.Question_ID_PK, Category_ID_FK = item.Id });
-        //    }
+            foreach (var item in question.Categories.Where(q => q.Id != 0))
+            {
+                var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = addedQuestion.QuestionIdPk, CategoryIdFk = item.Id });
+            }
 
-        //    foreach (var item in nonExistantCategories)
-        //    {
-        //        var qc1 = questionRepository.Add(new E.QuestionCategory { Question_ID_FK = addedQuestion.Question_ID_PK, Category_ID_FK = item.Id });
-        //    }
-        //    B.Question rtn = new B.Question {
-        //                        Id = addedQuestion.Question_ID_PK,
-        //                        RoundId = addedQuestion.Round_ID_FK,
-        //                        Question1 = addedQuestion.Question1,
-        //                        Answer = addedQuestion.Answer,
-        //                        QuestionDifficulty = addedQuestion.QuestionDifficulty
-        //                    };
-        //    return rtn;
-        //}
+            foreach (var item in nonExistantCategories)
+            {
+                var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = addedQuestion.QuestionIdPk, CategoryIdFk = item.Id });
+            }
+            B.Question rtn = new B.Question
+            {
+                Id = addedQuestion.QuestionIdPk,
+                RoundId = addedQuestion.RoundIdFk,
+                Question1 = addedQuestion.Question1,
+                Answer = addedQuestion.Answer,
+                QuestionDifficulty = addedQuestion.QuestionDifficulty
+            };
+            return rtn;
+        }
 
-        //public B.Question EditQuestion(B.Question question)
-        //{
-        //    var addedQuestion = questionRepository.Update(new E.Question {
-        //                    Question_ID_PK = question.Id,
-        //                    Question1 = question.Question1,
-        //                    Answer = question.Answer,
-        //                    Round_ID_FK = question.RoundId,
-        //                    QuestionDifficulty = question.QuestionDifficulty
-        //    });
+        public B.Question EditQuestion(B.Question question)
+        {
+            var addedQuestion = questionRepository.Update(new E.Question
+            {
+                QuestionIdPk = question.Id,
+                Question1 = question.Question1,
+                Answer = question.Answer,
+                RoundIdFk = question.RoundId,
+                QuestionDifficulty = question.QuestionDifficulty
+            });
 
-        //    List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
-        //    List<B.Category> nonExistantCategories = new List<B.Category>();
-        //    foreach (var item in question.Categories.Where(q => q.Id == 0))//non existant categories - add them
-        //    {
-        //        var nec = questionRepository.Add(new E.Category { Name = item.Name });
-        //        nonExistantCategories.Add(new B.Category { Id = nec.Category_ID_PK, Name = nec.Name });
-        //    }
+            List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
+            List<B.Category> nonExistantCategories = new List<B.Category>();
+            foreach (var item in question.Categories.Where(q => q.Id == 0))//non existant categories - add them
+            {
+                var nec = questionRepository.Add(new E.Category { Name = item.Name });
+                nonExistantCategories.Add(new B.Category { Id = nec.CategoryIdPk, Name = nec.Name });
+            }
 
-        //    var existingQuestionCategories = questionRepository.GetQuestionCategories(question.Id);
+            var existingQuestionCategories = questionRepository.GetQuestionCategories(question.Id);
 
-        //    foreach (var item in question.Categories.Where(q => q.Id != 0))
-        //    {
-        //        if(existingQuestionCategories.Where(eqc => eqc.Category_ID_FK == item.Id).Count() == 0)
-        //        {
-        //            var qc1 = questionRepository.Add(new E.QuestionCategory { Question_ID_FK = addedQuestion.Question_ID_PK, Category_ID_FK = item.Id });
-        //        }
+            foreach (var item in question.Categories.Where(q => q.Id != 0))
+            {
+                if (existingQuestionCategories.Where(eqc => eqc.CategoryIdFk == item.Id).Count() == 0)
+                {
+                    var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = addedQuestion.QuestionIdPk, CategoryIdFk = item.Id });
+                }
 
-        //    }
+            }
 
-        //    foreach (var item in existingQuestionCategories)
-        //    {
-        //        if(question.Categories.Where(c => c.Id == item.Category_ID_FK).Count() == 0)
-        //        {
-        //            questionRepository.Delete(item.QuestionCategory_ID_PK);
-        //        }
-        //    }
+            foreach (var item in existingQuestionCategories)
+            {
+                if (question.Categories.Where(c => c.Id == item.CategoryIdFk).Count() == 0)
+                {
+                    questionRepository.Delete(item.QuestionCategoryIdPk);
+                }
+            }
 
-        //    foreach (var item in nonExistantCategories)
-        //    {
-        //        var qc1 = questionRepository.Add(new E.QuestionCategory { Question_ID_FK = addedQuestion.Question_ID_PK, Category_ID_FK = item.Id });
-        //    }
+            foreach (var item in nonExistantCategories)
+            {
+                var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = addedQuestion.QuestionIdPk, CategoryIdFk = item.Id });
+            }
 
-        //    B.Question rtn = new B.Question
-        //    {
-        //        Id = addedQuestion.Question_ID_PK,
-        //        RoundId = addedQuestion.Round_ID_FK,
-        //        Question1 = addedQuestion.Question1,
-        //        Answer = addedQuestion.Answer
-        //    };
-        //    return rtn;
-        //}
+            B.Question rtn = new B.Question
+            {
+                Id = addedQuestion.QuestionIdPk,
+                RoundId = addedQuestion.RoundIdFk,
+                Question1 = addedQuestion.Question1,
+                Answer = addedQuestion.Answer
+            };
+            return rtn;
+        }
 
-        //public B.Question GetQuestion(int QuestionId)
-        //{
-        //    var question = questionRepository.Get(QuestionId);
-        //    var questionCategories = questionRepository.GetCategoriesForQuestion(QuestionId).Select(qc => new B.Category {
-        //           Id = qc.Category_ID_FK,
-        //           Name = qc.Category.Name
-        //    }).ToList();
+        public B.Question GetQuestion(int QuestionId)
+        {
+            var question = questionRepository.Get(QuestionId);
+            var questionCategories = questionRepository.GetCategoriesForQuestion(QuestionId).Select(qc => new B.Category
+            {
+                Id = qc.CategoryIdFk,
+                Name = qc.CategoryIdFkNavigation.Name
+            }).ToList();
 
-        //    B.Question rtn = new B.Question {
-        //                        Id = question.Question_ID_PK,
-        //                        RoundId = question.Round_ID_FK,
-        //                        Question1 = question.Question1,
-        //                        Answer = question.Answer,
-        //                        Categories = questionCategories,
-        //                        QuestionDifficulty = question.QuestionDifficulty
-        //                    };
-        //    return rtn;
-        //}
+            B.Question rtn = new B.Question
+            {
+                Id = question.QuestionIdPk,
+                RoundId = question.RoundIdFk,
+                Question1 = question.Question1,
+                Answer = question.Answer,
+                Categories = questionCategories,
+                QuestionDifficulty = question.QuestionDifficulty
+            };
+            return rtn;
+        }
 
         //public IEnumerable<B.Question> GetQuestions()
         //{

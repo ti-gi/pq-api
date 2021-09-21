@@ -72,6 +72,23 @@ namespace pq_api.Controllers
 
         }
 
+        [Authorize]
+        [HttpGet("rounds/{roundId}/questions")]
+        public IEnumerable<M.Question> GetQuestionForRound(int roundId)
+        {
+            IEnumerable<M.Question> rtn = appService.GetQuestionsForRound(roundId).Select(q => new M.Question
+            {
+                id = q.Id,
+                roundId = q.RoundId,
+                question = q.Question1,
+                answer = q.Answer,
+                Categories = q.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                QuestionDifficulty = q.QuestionDifficulty
+            });
 
+            return rtn;
         }
+
+
     }
+}

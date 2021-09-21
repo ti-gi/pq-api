@@ -80,6 +80,7 @@ namespace pq_api
             services.AddTransient<IContestantRepository, ContestantRepository>();
             services.AddTransient<IQuizRepository, QuizRepository>();
             services.AddTransient<IRoundRepository, RoundRepository>();
+            services.AddTransient<IQuestionRepository, QuestionRepositroy>();
 
             services.AddSwaggerGen(c =>
             {
