@@ -8,7 +8,7 @@ using pq_api.data.Entities;
 
 namespace pq_api.data.Repositories
 {
-    public interface IRoundRepository
+    public interface IRoundRepository: IRepository<Round>
     {
         Round Add(Round entity);
         Round Update(Round entity);

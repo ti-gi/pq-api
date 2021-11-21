@@ -16,6 +16,7 @@ namespace pq_api.service
         B.Competition EditCompetition(B.Competition competition);
         IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId);
 
+        IEnumerable<B.Quiz> GetQuizzes();
         IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId);
         IEnumerable<B.Contestant> GetContestantsForCompetition(int CompetitionId);
         B.Quiz GetQuiz(int QuizId);
@@ -28,6 +29,7 @@ namespace pq_api.service
         IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
         IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
 
+        IEnumerable<B.Round> GetRounds();
         B.Round GetRound(int RoundId);
         B.Round AddRound(B.Round entity);
         B.Round EditRound(B.Round entity);

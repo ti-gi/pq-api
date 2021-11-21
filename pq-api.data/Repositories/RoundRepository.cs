@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using pq_api.data.Entities;
 
@@ -12,6 +13,11 @@ namespace pq_api.data.Repositories
         public RoundRepository(pqsightcom_dev_core_1Context entities)
         {
             pqEntities = entities;
+        }
+
+        public IEnumerable<Round> All()
+        {
+            return pqEntities.Rounds.ToList();
         }
 
         public Round Get(int id)
@@ -81,6 +87,16 @@ namespace pq_api.data.Repositories
         public int CountOfRoundsPerQuiz(int QuizId)
         {
             return pqEntities.Rounds.Where(r => r.QuizIdFk == QuizId).Count();
+        }
+
+        public IEnumerable<Round> Find(Expression<Func<Round, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -44,8 +44,8 @@ namespace pq_api
                     {
                         builder
                         //.WithOrigins("http://localhost:8080")
-                        //.WithOrigins("http://localhost:3000")
-                        .WithOrigins("https://proud-pebble-01859a003.azurestaticapps.net")
+                        .WithOrigins("http://localhost:3000")
+                        //.WithOrigins("https://proud-pebble-01859a003.azurestaticapps.net")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();

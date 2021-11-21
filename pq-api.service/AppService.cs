@@ -72,6 +72,17 @@ namespace pq_api.service
 
         #region Quiz
 
+        public IEnumerable<B.Quiz> GetQuizzes()
+        {
+            IEnumerable<B.Quiz> rtn = quizRepository.All().Select(q => new B.Quiz
+            {
+                Id = q.QuizIdPk,
+                CompetitionId = q.CompetitionIdFk,
+                Name = q.Name
+            });
+
+            return rtn;
+        }
         public IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId)
         {
             IEnumerable<B.Quiz> rtn = quizRepository.GetQuizzesForCompetition(CompetitionId).Select(q => new B.Quiz
@@ -120,6 +131,17 @@ namespace pq_api.service
 
         //Rounds
 
+        public IEnumerable<B.Round> GetRounds()
+        {
+            IEnumerable<B.Round> rtn = roundRepository.All().Select(q => new B.Round
+            {
+                Id = q.RoundIdPk,
+                QuizId = q.QuizIdFk,
+                Name = q.Name
+            });
+
+            return rtn;
+        }
         public B.Round GetRound(int RoundId)
         {
             var round = roundRepository.Get(RoundId);

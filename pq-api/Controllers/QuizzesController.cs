@@ -27,6 +27,21 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
+        [HttpGet("quizzes")]
+        public IEnumerable<M.Quiz> GetQuizzes()
+        {
+            IEnumerable<M.Quiz> rtn = appService.GetQuizzes().Select(q => new M.Quiz
+            {
+                id = q.Id,
+                competitionId = q.CompetitionId,
+                name = q.Name
+            });
+
+            return rtn;
+
+        }
+
+        [Authorize]
         [HttpGet("quizzes/{QuizId}")]
         public M.Quiz GetQuiz(int QuizId)
         {
