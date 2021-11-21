@@ -10,6 +10,7 @@ using pq_api.data.Entities;
 using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
+using System.Security.Claims;
 
 namespace pq_api.Controllers
 {
@@ -20,10 +21,12 @@ namespace pq_api.Controllers
         //private readonly pqsightcom_dev_core_1Context _context;
 
         private IAppService appService;
+        private IHttpContextAccessor httpContextAccessor;
 
-        public CompetitionsController(IAppService appService)
+        public CompetitionsController(IAppService appService, IHttpContextAccessor httpContextAccessor)
         {
             this.appService = appService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         // GET: api/Competitions
@@ -31,7 +34,8 @@ namespace pq_api.Controllers
         [Authorize]
         public IEnumerable<M.Competition> GetCompetitions()
         {
-            var results = appService.GetAllCompetitions();
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var results = appService.GetAllCompetitions(userId);
             var rtn = new List<M.Competition>();
 
             foreach (var r in results)
@@ -145,8 +149,9 @@ namespace pq_api.Controllers
         [HttpPost("competitions/add")]
         public M.Competition CreateCompetition(M.CompetitionCreate c)
         {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var addedCompetition = appService.AddCompetition(new B.Competition { Name = c.Name });
+            var addedCompetition = appService.AddCompetition(new B.Competition { Name = c.Name }, userId);
             return new M.Competition
             {
                 id = addedCompetition.Id,

@@ -36,9 +36,9 @@ namespace pq_api.service
             return rtn;
         }
 
-        public B.Competition AddCompetition(B.Competition competition)
+        public B.Competition AddCompetition(B.Competition competition, string userId)
         {
-            var addedCompetition = competitionRepository.Add(new E.Competition { Name = competition.Name });
+            var addedCompetition = competitionRepository.Add(new E.Competition { Name = competition.Name, UserId = userId});
             B.Competition rtn = new B.Competition { Id = addedCompetition.CompetitionIdPk, Name = addedCompetition.Name };
             return rtn;
         }
@@ -50,9 +50,11 @@ namespace pq_api.service
             return rtn;
         }
 
-        public IEnumerable<B.Competition> GetAllCompetitions()
+        public IEnumerable<B.Competition> GetAllCompetitions(string userId)
         {
-            IEnumerable<B.Competition> rtn = competitionRepository.All().Select( c => new B.Competition { Id = c.CompetitionIdPk, Name = c.Name });
+            IEnumerable<B.Competition> rtn = competitionRepository.All(userId)
+                .Select( c => new B.Competition { Id = c.CompetitionIdPk, Name = c.Name });
+
             return rtn;
         }
 
@@ -74,7 +76,8 @@ namespace pq_api.service
 
         public IEnumerable<B.Quiz> GetQuizzes()
         {
-            IEnumerable<B.Quiz> rtn = quizRepository.All().Select(q => new B.Quiz
+            string userId = "";
+            IEnumerable<B.Quiz> rtn = quizRepository.All(userId).Select(q => new B.Quiz
             {
                 Id = q.QuizIdPk,
                 CompetitionId = q.CompetitionIdFk,
@@ -133,7 +136,8 @@ namespace pq_api.service
 
         public IEnumerable<B.Round> GetRounds()
         {
-            IEnumerable<B.Round> rtn = roundRepository.All().Select(q => new B.Round
+            string userId = "";
+            IEnumerable<B.Round> rtn = roundRepository.All(userId).Select(q => new B.Round
             {
                 Id = q.RoundIdPk,
                 QuizId = q.QuizIdFk,

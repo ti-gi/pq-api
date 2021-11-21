@@ -42,7 +42,7 @@ namespace pq_api.data.Repositories
             return existingQuiz;
         }
 
-        public IEnumerable<Quiz> All()
+        public IEnumerable<Quiz> All(string userId)
         {
             return pqEntities.Quizzes.ToList();
         }

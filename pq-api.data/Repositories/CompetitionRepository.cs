@@ -30,12 +30,12 @@ namespace pq_api.data.Repositories
             return entity;
         }
 
-        public IEnumerable<Competition> All()
+        public IEnumerable<Competition> All(string userId)
         {
             //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
             //this.pqEntities = DataModel.DataModel.SelectDatabase(tenantId);
             //return pqEntities.Competitions.Where(c => c.Tenant_ID_FK == tenantId).ToList();
-            return pqEntities.Competitions.ToList();
+            return pqEntities.Competitions.Where(c => c.UserId == userId).ToList();
             
         }
 

@@ -15,7 +15,7 @@ namespace pq_api.data.Repositories
             pqEntities = entities;
         }
 
-        public IEnumerable<Round> All()
+        public IEnumerable<Round> All(string userId)
         {
             return pqEntities.Rounds.ToList();
         }

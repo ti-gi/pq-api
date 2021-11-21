@@ -11,8 +11,8 @@ namespace pq_api.service
     public interface IAppService
     {
         B.Competition GetCompetition(int CompetitionId);
-        IEnumerable<B.Competition> GetAllCompetitions();
-        B.Competition AddCompetition(B.Competition competition);
+        IEnumerable<B.Competition> GetAllCompetitions(string userId);
+        B.Competition AddCompetition(B.Competition competition, string userId);
         B.Competition EditCompetition(B.Competition competition);
         IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId);
 

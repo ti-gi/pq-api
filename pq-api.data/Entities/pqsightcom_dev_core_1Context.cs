@@ -68,6 +68,10 @@ namespace pq_api.data.Entities
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(150);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<Contestant>(entity =>
