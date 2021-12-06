@@ -596,7 +596,7 @@ namespace pq_api.service
         public B.Contestant AddContestant(B.Contestant contestant)
         {
             var addedContestant = contestantRepository.Add(new E.Contestant { Name = contestant.Name, CompetitionIdFk = contestant.CompetitionId });
-            B.Contestant rtn = new B.Contestant { Id = addedContestant.CompetitionIdFk, Name = addedContestant.Name, CompetitionId = addedContestant.CompetitionIdFk };
+            B.Contestant rtn = new B.Contestant { Id = addedContestant.ContestantIdPk, Name = addedContestant.Name, CompetitionId = addedContestant.CompetitionIdFk };
             return rtn;
         }
 

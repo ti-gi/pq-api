@@ -50,7 +50,8 @@ namespace pq_api.Controllers
             return new M.Contestant
             {
                 id = addedContestant.Id,
-                name = addedContestant.Name
+                name = addedContestant.Name,
+                competitionId = addedContestant.CompetitionId
 
             };
 
