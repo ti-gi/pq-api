@@ -45,7 +45,7 @@ namespace pq_api
                         builder
                         //.WithOrigins("http://localhost:8080")
                         //.WithOrigins("http://localhost:3000")
-                        .WithOrigins("https://icy-glacier-05dc47703.azurestaticapps.net/")
+                        .WithOrigins("https://icy-glacier-05dc47703.azurestaticapps.net")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();
