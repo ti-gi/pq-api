@@ -43,31 +43,53 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpPost("contestants/add")]
-        public M.Contestant CreateContestant(M.ContestantCreate c)
+        public Response<M.Contestant> CreateContestant(M.ContestantCreate c)
         {
 
             var addedContestant = appService.AddContestant(new B.Contestant { Name = c.Name, CompetitionId = c.CompetitionId });
-            return new M.Contestant
+            M.Contestant contestant = null;
+            if (addedContestant.Data != null)
             {
-                id = addedContestant.Id,
-                name = addedContestant.Name,
-                competitionId = addedContestant.CompetitionId
+                contestant = new M.Contestant
+                {
+                    id = addedContestant.Data.Id,
+                    name = addedContestant.Data.Name,
+                    competitionId = addedContestant.Data.CompetitionId
 
+                };
+            }
+
+            return new Response<M.Contestant>
+            {
+                Data = contestant,
+                Message = addedContestant.Message
             };
 
         }
 
         [Authorize]
         [HttpPost("contestants/update")]
-        public M.Contestant UpdateContestant(M.ContestantUpdate c)
+        public Response<M.Contestant> UpdateContestant(M.ContestantUpdate c)
         {
 
             var updatedContestant = appService.EditContestant(new B.Contestant { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
-            return new M.Contestant
+
+            M.Contestant contestant = null;
+            if (updatedContestant.Data != null)
             {
-                id = updatedContestant.Id,
-                name = updatedContestant.Name,
-                competitionId = updatedContestant.CompetitionId
+                contestant = new M.Contestant
+                {
+                    id = updatedContestant.Data.Id,
+                    name = updatedContestant.Data.Name,
+                    competitionId = updatedContestant.Data.CompetitionId
+
+                };
+            }
+
+            return new Response<M.Contestant>
+            {
+                Data = contestant,
+                Message = updatedContestant.Message
             };
         }
 

@@ -593,18 +593,60 @@ namespace pq_api.service
             return rtn;
         }
 
-        public B.Contestant AddContestant(B.Contestant contestant)
+        public Response<B.Contestant> AddContestant(B.Contestant contestant)
         {
-            var addedContestant = contestantRepository.Add(new E.Contestant { Name = contestant.Name, CompetitionIdFk = contestant.CompetitionId });
-            B.Contestant rtn = new B.Contestant { Id = addedContestant.ContestantIdPk, Name = addedContestant.Name, CompetitionId = addedContestant.CompetitionIdFk };
-            return rtn;
+            if(contestantRepository.GetByName(contestant.Name) != null)
+            {
+                return new Response<B.Contestant> { 
+                    Data = null, 
+                    Message = "Contestant with the same name already exists! Please select different name." 
+                };
+            }
+            var addedContestant = contestantRepository.Add(new E.Contestant { 
+                            Name = contestant.Name, 
+                            CompetitionIdFk = contestant.CompetitionId 
+            });
+
+            B.Contestant rtn = new B.Contestant { 
+                Id = addedContestant.ContestantIdPk, 
+                Name = addedContestant.Name, 
+                CompetitionId = addedContestant.CompetitionIdFk 
+            };
+
+            return new Response<B.Contestant> { 
+                Data = rtn, 
+                Message = "" 
+            };
         }
 
-        public B.Contestant EditContestant(B.Contestant contestant)
+        public Response<B.Contestant> EditContestant(B.Contestant contestant)
         {
-            var updatedContestant = contestantRepository.Update(new E.Contestant { ContestantIdPk = contestant.Id, Name = contestant.Name, CompetitionIdFk = contestant.CompetitionId });
-            B.Contestant rtn = new B.Contestant { Id = updatedContestant.ContestantIdPk, Name = updatedContestant.Name, CompetitionId = updatedContestant.CompetitionIdFk };
-            return rtn;
+            if (contestantRepository.GetByName(contestant.Name) != null)
+            {
+                return new Response<B.Contestant>
+                {
+                    Data = null,
+                    Message = "Contestant with the same name already exists! Please select different name."
+                };
+            }
+
+            var updatedContestant = contestantRepository.Update(new E.Contestant { 
+                        ContestantIdPk = contestant.Id, 
+                        Name = contestant.Name, 
+                        CompetitionIdFk = contestant.CompetitionId 
+            });
+
+            B.Contestant rtn = new B.Contestant { 
+                Id = updatedContestant.ContestantIdPk, 
+                Name = updatedContestant.Name, 
+                CompetitionId = updatedContestant.CompetitionIdFk 
+            };
+
+            return new Response<B.Contestant>
+            {
+                Data = rtn,
+                Message = ""
+            };
         }
         #endregion
     }

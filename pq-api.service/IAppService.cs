@@ -50,8 +50,8 @@ namespace pq_api.service
         //IEnumerable<B.RoundResult> GetRoundResultsForRound(int RoundId);
 
         B.Contestant GetContestant(int ContestantId);
-        B.Contestant AddContestant(B.Contestant contestant);
-        B.Contestant EditContestant(B.Contestant contestant);
+        Response<B.Contestant> AddContestant(B.Contestant contestant);
+        Response<B.Contestant> EditContestant(B.Contestant contestant);
 
     }
 }

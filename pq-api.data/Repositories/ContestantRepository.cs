@@ -40,7 +40,10 @@ namespace pq_api.data.Repositories
 
         public Contestant GetByName(string name)
         {
-            return pqEntities.Contestants.Where(q => q.Name == name).First();
+            if (pqEntities.Contestants.Where(q => q.Name == name).Count() > 0)
+                return pqEntities.Contestants.Where(q => q.Name == name).First();
+            else
+                return null;
         }
 
         public void SaveChanges()
