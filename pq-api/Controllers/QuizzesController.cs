@@ -277,6 +277,35 @@ namespace pq_api.Controllers
             return rtn;
         }
 
+        [HttpDelete("quizzes/{QuizId}/delete-quiz-result/{id}")]
+        public M.QuizResult DeleteQuizResult(int id)
+        {
+            var r = appService.DeleteQuizResult(id);
+
+            return new M.QuizResult
+            {
+                Id = r.Id,
+                QuizId = r.QuizId,
+                ContestantId = r.ContestantId,
+
+                Round1Points = r.Round1Points,
+                PointsAfterRound1 = r.PointsAfterRound1,
+                RoundResult1Id = r.RoundResult1Id,
+
+                Round2Points = r.Round2Points,
+                PointsAfterRound2 = r.PointsAfterRound2,
+                RoundResult2Id = r.RoundResult2Id,
+
+                Round3Points = r.Round3Points,
+                PointsAfterRound3 = r.PointsAfterRound3,
+                RoundResult3Id = r.RoundResult3Id,
+
+                Round4Points = r.Round4Points,
+                PointsAfterRound4 = r.PointsAfterRound4,
+                RoundResult4Id = r.RoundResult4Id
+            };
+        }
+
 
     }
 }

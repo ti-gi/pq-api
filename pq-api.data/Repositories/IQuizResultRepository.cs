@@ -14,5 +14,6 @@ namespace pq_api.data.Repositories
         //IEnumerable<QuizResult> RefreshQuizResults(int QuizId);
         QuizResult AddQuizResult(QuizResult Quiz);
         QuizResult UpdateQuizResult(QuizResult Quiz);
+        QuizResult DeleteQuizResult(int id);
     }
 }

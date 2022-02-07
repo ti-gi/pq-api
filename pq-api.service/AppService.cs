@@ -573,6 +573,23 @@ namespace pq_api.service
             return rtn;
         }
 
+        public B.QuizResult DeleteQuizResult(int id)
+        {
+            var res = quizRepository.DeleteQuizResult(id);
+            return new B.QuizResult
+            {
+                Id = res.QuizResultIdPk,
+                Round1Points = res.Round1Points,
+                Round2Points = res.Round2Points,
+                Round3Points = res.Round3Points,
+                Round4Points = res.Round4Points,
+                PointsAfterRound1 = res.PointsAfterRound1,
+                PointsAfterRound2 = res.PointsAfterRound2,
+                PointsAfterRound3 = res.PointsAfterRound3,
+                PointsAfterRound4 = res.PointsAfterRound4
+            };
+        }
+
         #region Contestant
         public IEnumerable<B.Contestant> GetContestantsForCompetition(int CompetitionId)
         {

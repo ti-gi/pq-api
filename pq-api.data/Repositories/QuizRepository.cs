@@ -113,6 +113,14 @@ namespace pq_api.data.Repositories
             return existingQuizResult;
         }
 
+        public QuizResult DeleteQuizResult(int id)
+        {
+            var quizResult = pqEntities.QuizResults.Where(r => r.QuizResultIdPk == id).First();
+            pqEntities.QuizResults.Remove(quizResult);
+            pqEntities.SaveChanges();
+            return quizResult;
+        }
+
         public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
         {
             return pqEntities.QuizResultFinal.FromSqlRaw("Get_QuizResults @p0", QuizId).ToList();
