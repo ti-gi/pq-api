@@ -62,6 +62,14 @@ namespace pq_api.data.Repositories
             return existingContestant;
         }
 
+        public Contestant Delete(int id)
+        {
+            var contestant = pqEntities.Contestants.Where(r => r.ContestantIdPk == id).First();
+            pqEntities.Contestants.Remove(contestant);
+            pqEntities.SaveChanges();
+            return contestant;
+        }
+
         public IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId)
         {
             return pqEntities.Contestants.Where(q => q.CompetitionIdFk == CompetitionId).ToList();

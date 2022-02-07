@@ -10,6 +10,7 @@ namespace pq_api.data.Repositories
 {
     public interface IQuizResultRepository
     {
+        IEnumerable<QuizResult> GetQuizResults();
         IEnumerable<QuizResult> GetQuizResults(int QuizId);
         //IEnumerable<QuizResult> RefreshQuizResults(int QuizId);
         QuizResult AddQuizResult(QuizResult Quiz);

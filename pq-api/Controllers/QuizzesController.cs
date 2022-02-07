@@ -277,6 +277,7 @@ namespace pq_api.Controllers
             return rtn;
         }
 
+        [Authorize]
         [HttpDelete("quizzes/{QuizId}/delete-quiz-result/{id}")]
         public M.QuizResult DeleteQuizResult(int id)
         {

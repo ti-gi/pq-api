@@ -74,6 +74,10 @@ namespace pq_api.data.Repositories
         //#endregion
 
         //#region  QuizResults
+        public IEnumerable<QuizResult> GetQuizResults()
+        {
+            return pqEntities.QuizResults.Include(q => q.ContestantIdFkNavigation).ToList();
+        }
 
         public IEnumerable<QuizResult> GetQuizResults(int QuizId)
         {

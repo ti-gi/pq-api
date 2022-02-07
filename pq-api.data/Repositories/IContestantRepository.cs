@@ -13,6 +13,7 @@ namespace pq_api.data.Repositories
     {
         Contestant Add(Contestant entity);
         Contestant Update(Contestant entity);
+        Contestant Delete(int id);
         Contestant Get(int id);
         Contestant GetByName(string name);
         IEnumerable<Contestant> All();

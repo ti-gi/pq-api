@@ -665,6 +665,58 @@ namespace pq_api.service
                 Message = ""
             };
         }
+
+        public Response<B.Contestant> DeleteContestant(int id, bool deleteConfirmed)
+        {
+            if(!deleteConfirmed)
+            {
+                if (quizRepository.GetQuizResults().Where(qr => qr.ContestantIdFk == id).Count() > 0)
+                {
+                    return new Response<B.Contestant>
+                    {
+                        Data = null,
+                        Message = "Also delete results related to selected contestant?"
+                    };
+                }
+                else
+                {
+                    return new Response<B.Contestant>
+                    {
+                        Data = null,
+                        Message = "Are you sure you want to delete selected contestant?"
+                    };
+                }
+            }
+
+            else
+            {
+                //delete related results
+                var quizResultsForContestant = quizRepository.GetQuizResults().Where(qr => qr.ContestantIdFk == id);
+                foreach (var item in quizResultsForContestant)
+                {
+                    quizRepository.DeleteQuizResult(item.QuizResultIdPk);
+                }
+
+                //delete contestant
+                var deletedContestant = contestantRepository.Delete(id);
+
+                B.Contestant rtn = new B.Contestant
+                {
+                    Id = deletedContestant.ContestantIdPk,
+                    Name = deletedContestant.Name,
+                    CompetitionId = deletedContestant.CompetitionIdFk
+                };
+
+                return new Response<B.Contestant>
+                {
+                    Data = rtn,
+                    Message = ""
+                };
+
+            }
+
+            
+        }
         #endregion
     }
 }

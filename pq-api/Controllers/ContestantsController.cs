@@ -93,6 +93,31 @@ namespace pq_api.Controllers
             };
         }
 
+        [Authorize]
+        [HttpDelete("contestants/delete/{id}")]
+        public Response<M.Contestant> DeleteContestant(int id, [FromQuery(Name = "deleteConfirmed")] bool deleteConfirmed)
+        {
+            var deletedContestant = appService.DeleteContestant(id, deleteConfirmed);
+            M.Contestant contestant = null;
 
+            if (deletedContestant.Data != null)
+            {
+                contestant = new M.Contestant
+                {
+                    id = deletedContestant.Data.Id,
+                    name = deletedContestant.Data.Name,
+                    competitionId = deletedContestant.Data.CompetitionId
+
+                };
+            }
+
+            return new Response<M.Contestant>
+            {
+                Data = contestant,
+                Message = deletedContestant.Message
+            };
         }
+
+
     }
+}

@@ -53,6 +53,7 @@ namespace pq_api.service
         B.Contestant GetContestant(int ContestantId);
         Response<B.Contestant> AddContestant(B.Contestant contestant);
         Response<B.Contestant> EditContestant(B.Contestant contestant);
+        Response<B.Contestant> DeleteContestant(int id, bool deleteConfirmed);
 
     }
 }
