@@ -18,6 +18,10 @@ namespace pq_api.data.Repositories
         }
 
         #region Quiz
+        public IEnumerable<Quiz> GetQuizzes(string userId)
+        {
+            return pqEntities.Quizzes.ToList();
+        }
 
         public IEnumerable<Quiz> GetQuizzesForCompetition(int CompetitionId)
         {
@@ -42,10 +46,7 @@ namespace pq_api.data.Repositories
             return existingQuiz;
         }
 
-        public IEnumerable<Quiz> All(string userId)
-        {
-            return pqEntities.Quizzes.ToList();
-        }
+       
 
         public IEnumerable<Quiz> Find(Expression<Func<Quiz, bool>> predicate)
         {

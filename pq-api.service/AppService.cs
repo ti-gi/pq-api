@@ -52,7 +52,7 @@ namespace pq_api.service
 
         public IEnumerable<B.Competition> GetAllCompetitions(string userId)
         {
-            IEnumerable<B.Competition> rtn = competitionRepository.All(userId)
+            IEnumerable<B.Competition> rtn = competitionRepository.GetCompetitions(userId)
                 .Select( c => new B.Competition { Id = c.CompetitionIdPk, Name = c.Name });
 
             return rtn;
@@ -77,7 +77,7 @@ namespace pq_api.service
         public IEnumerable<B.Quiz> GetQuizzes()
         {
             string userId = "";
-            IEnumerable<B.Quiz> rtn = quizRepository.All(userId).Select(q => new B.Quiz
+            IEnumerable<B.Quiz> rtn = quizRepository.GetQuizzes(userId).Select(q => new B.Quiz
             {
                 Id = q.QuizIdPk,
                 CompetitionId = q.CompetitionIdFk,

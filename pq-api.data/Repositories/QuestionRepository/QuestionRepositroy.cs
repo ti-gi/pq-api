@@ -17,6 +17,24 @@ namespace pq_api.data.Repositories
             pqEntities = Entities;
         }
 
+        public IEnumerable<Question> GetQuestions()
+        {
+            //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
+            //this.pqEntities = DataModel.DataModel.SelectDatabase(tenantId);
+            return pqEntities.Questions.ToList();
+        }
+
+        public IEnumerable<Question> GetQuestionsForRound(int RoundId)
+        {
+            return pqEntities.Questions.Include(q => q.QuestionCategories).ThenInclude(c => c.CategoryIdFkNavigation).
+                Where(q => q.RoundIdFk == RoundId).ToList();
+        }
+
+        public Question Get(int id)
+        {
+            return pqEntities.Questions.Where(q => q.QuestionIdPk == id).First();
+        }
+
         public Question Add(Question entity)
         {
             pqEntities.Questions.Add(entity);
@@ -37,23 +55,7 @@ namespace pq_api.data.Repositories
             return existingQuestion;
         }
 
-        public IEnumerable<Question> All()
-        {
-            //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
-            //this.pqEntities = DataModel.DataModel.SelectDatabase(tenantId);
-            return pqEntities.Questions.ToList();
-        }
-
-        public IEnumerable<Question> Find(Expression<Func<Question, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Question Get(int id)
-        {
-            return pqEntities.Questions.Where(q => q.QuestionIdPk == id).First();
-        }
-
+       
         public IEnumerable<QuestionCategory> GetCategoriesForQuestion(int QuestionId)
         {
             return pqEntities.QuestionCategories.Include(q => q.CategoryIdFkNavigation).Where(q => q.QuestionIdFk == QuestionId).ToList();
@@ -93,11 +95,7 @@ namespace pq_api.data.Repositories
             return pqEntities.QuestionCategories.Where(qc => qc.QuestionIdFk == id).ToList();
         }
 
-        public IEnumerable<Question> GetQuestionsForRound(int RoundId)
-        {
-            return pqEntities.Questions.Include(q => q.QuestionCategories).ThenInclude(c => c.CategoryIdFkNavigation).
-                Where(q => q.RoundIdFk == RoundId).ToList();
-        }
+        
 
         public void SaveChanges()
         {

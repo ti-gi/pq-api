@@ -11,21 +11,22 @@ namespace pq_api.data.Repositories
 {
     public interface IQuestionRepository
     {
+        IEnumerable<Question> GetQuestions();
+        IEnumerable<Question> GetQuestionsForRound(int RoundId);
+        Question Get(int id);
         Question Add(Question entity);
         Question Update(Question entity);
-        Question Get(int id);
-        IEnumerable<Question> All();
-        IEnumerable<Question> Find(Expression<Func<Question, bool>> predicate);
-        void SaveChanges();
 
+
+        IEnumerable<QuestionCategory> GetQuestionCategories(int id);
+        IEnumerable<QuestionCategory> GetCategoriesForQuestion(int QuestionId);
         QuestionCategory Add(QuestionCategory entity);
         QuestionCategory Delete(int QuestionCategoryId);
-        Category Add(Category entity);
-        IEnumerable<QuestionCategory> GetCategoriesForQuestion(int QuestionId);
 
-        IEnumerable<Question> GetQuestionsForRound(int RoundId);
+        
         IEnumerable<Category> GetCategories();
-        IEnumerable<QuestionCategory> GetQuestionCategories(int id);
+        Category Add(Category entity);
+        
 
     }
 }

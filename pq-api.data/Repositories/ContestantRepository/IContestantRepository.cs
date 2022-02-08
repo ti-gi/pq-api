@@ -11,17 +11,13 @@ namespace pq_api.data.Repositories
 {
     public interface IContestantRepository
     {
+        IEnumerable<Contestant> GetContestants();
+        IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId);
+        Contestant GetByName(string name);
+        Contestant Get(int id);
         Contestant Add(Contestant entity);
         Contestant Update(Contestant entity);
         Contestant Delete(int id);
-        Contestant Get(int id);
-        Contestant GetByName(string name);
-        IEnumerable<Contestant> All();
-        IEnumerable<Contestant> Find(Expression<Func<Contestant, bool>> predicate);
-        void SaveChanges();
-
-        IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId);
-
 
     }
 }

@@ -21,27 +21,9 @@ namespace pq_api.data.Repositories
             //pqEntities = new pqEntities("pqEntities2");
         }
 
-        public Competition Add(Competition entity)
+        public IEnumerable<Competition> GetCompetitions(string userId)
         {
-            //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
-            //entity.Tenant_ID_FK = tenantId;
-            pqEntities.Competitions.Add(entity);
-            pqEntities.SaveChanges();
-            return entity;
-        }
-
-        public IEnumerable<Competition> All(string userId)
-        {
-            //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
-            //this.pqEntities = DataModel.DataModel.SelectDatabase(tenantId);
-            //return pqEntities.Competitions.Where(c => c.Tenant_ID_FK == tenantId).ToList();
             return pqEntities.Competitions.Where(c => c.UserId == userId).ToList();
-            
-        }
-
-        public IEnumerable<Competition> Find(Expression<Func<Competition, bool>> predicate)
-        {
-            throw new NotImplementedException();
         }
 
         public Competition Get(int id)
@@ -49,9 +31,13 @@ namespace pq_api.data.Repositories
             return pqEntities.Competitions.Where(c => c.CompetitionIdPk == id).First();
         }
 
-        public void SaveChanges()
+        public Competition Add(Competition entity)
         {
-            throw new NotImplementedException();
+            //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
+            //entity.Tenant_ID_FK = tenantId;
+            pqEntities.Competitions.Add(entity);
+            pqEntities.SaveChanges();
+            return entity;
         }
 
         public Competition Update(Competition entity)

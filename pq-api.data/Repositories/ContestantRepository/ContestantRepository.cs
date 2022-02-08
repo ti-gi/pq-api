@@ -16,26 +16,14 @@ namespace pq_api.data.Repositories
             pqEntities = Entities;
         }
 
-        public Contestant Add(Contestant entity)
-        {
-            pqEntities.Contestants.Add(entity);
-            pqEntities.SaveChanges();
-            return entity;
-        }
-
-        public IEnumerable<Contestant> All()
+        public IEnumerable<Contestant> GetContestants()
         {
             return pqEntities.Contestants.ToList();
         }
 
-        public IEnumerable<Contestant> Find(Expression<Func<Contestant, bool>> predicate)
+        public IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Contestant Get(int id)
-        {
-            return pqEntities.Contestants.Where(q => q.ContestantIdPk == id).First();
+            return pqEntities.Contestants.Where(q => q.CompetitionIdFk == CompetitionId).ToList();
         }
 
         public Contestant GetByName(string name)
@@ -46,9 +34,16 @@ namespace pq_api.data.Repositories
                 return null;
         }
 
-        public void SaveChanges()
+        public Contestant Get(int id)
         {
-            throw new NotImplementedException();
+            return pqEntities.Contestants.Where(q => q.ContestantIdPk == id).First();
+        }
+
+        public Contestant Add(Contestant entity)
+        {
+            pqEntities.Contestants.Add(entity);
+            pqEntities.SaveChanges();
+            return entity;
         }
 
         public Contestant Update(Contestant entity)
@@ -70,9 +65,5 @@ namespace pq_api.data.Repositories
             return contestant;
         }
 
-        public IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId)
-        {
-            return pqEntities.Contestants.Where(q => q.CompetitionIdFk == CompetitionId).ToList();
-        }
     }
 }
