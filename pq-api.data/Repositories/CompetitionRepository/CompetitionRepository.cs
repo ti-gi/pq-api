@@ -10,6 +10,7 @@ using pq_api.data.Entities;
 
 namespace pq_api.data.Repositories
 {
+    
     public class CompetitionRepository : ICompetitionRepository
     {
         protected readonly pqsightcom_dev_core_1Context pqEntities;
@@ -26,15 +27,13 @@ namespace pq_api.data.Repositories
             return pqEntities.Competitions.Where(c => c.UserId == userId).ToList();
         }
 
-        public Competition Get(int id)
+        public Competition Get(string userId, int id)
         {
-            return pqEntities.Competitions.Where(c => c.CompetitionIdPk == id).First();
+            return pqEntities.Competitions.Where(c =>  c.UserId == userId && c.CompetitionIdPk == id).First();
         }
 
         public Competition Add(Competition entity)
         {
-            //int tenantId = pqEntities.AspNetUsers.Where(u => u.UserName == System.Web.HttpContext.Current.User.Identity.Name).Select(u => u.TenantId).FirstOrDefault() ?? 0;
-            //entity.Tenant_ID_FK = tenantId;
             pqEntities.Competitions.Add(entity);
             pqEntities.SaveChanges();
             return entity;
@@ -42,7 +41,7 @@ namespace pq_api.data.Repositories
 
         public Competition Update(Competition entity)
         {
-            var existingCompetition = pqEntities.Competitions.Where(q => q.CompetitionIdPk == entity.CompetitionIdPk).FirstOrDefault();
+            var existingCompetition = pqEntities.Competitions.Where(c => c.UserId == entity.UserId && c.CompetitionIdPk == entity.CompetitionIdPk).FirstOrDefault();
             if (existingCompetition != null)
             {
                 existingCompetition.Name = entity.Name;

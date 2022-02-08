@@ -10,10 +10,10 @@ namespace pq_api.service
 {
     public interface IAppService
     {
-        B.Competition GetCompetition(int CompetitionId);
         IEnumerable<B.Competition> GetAllCompetitions(string userId);
-        B.Competition AddCompetition(B.Competition competition, string userId);
-        B.Competition EditCompetition(B.Competition competition);
+        B.Competition GetCompetition(string userId, int CompetitionId);
+        B.Competition AddCompetition(string userId, B.Competition competition);
+        B.Competition UpdateCompetition(string userId, B.Competition competition);
         IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId);
 
         IEnumerable<B.Quiz> GetQuizzes();

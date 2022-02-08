@@ -11,7 +11,7 @@ namespace pq_api.data.Repositories
     public interface ICompetitionRepository
     {
         IEnumerable<Competition> GetCompetitions(string userId);
-        Competition Get(int id);
+        Competition Get(string userId, int id);
         Competition Add(Competition entity);
         Competition Update(Competition entity);
         

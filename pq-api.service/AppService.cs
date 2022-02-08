@@ -28,35 +28,35 @@ namespace pq_api.service
         }
 
         #region Competition
-
-        public B.Competition GetCompetition(int CompetitionId)
+        public IEnumerable<B.Competition> GetAllCompetitions(string userId)
         {
-            var competition = competitionRepository.Get(CompetitionId);
+            IEnumerable<B.Competition> rtn = competitionRepository.GetCompetitions(userId)
+                .Select(c => new B.Competition { Id = c.CompetitionIdPk, Name = c.Name });
+
+            return rtn;
+        }
+
+        public B.Competition GetCompetition(string userId, int CompetitionId)
+        {
+            var competition = competitionRepository.Get(userId, CompetitionId);
             B.Competition rtn = new B.Competition { Id = competition.CompetitionIdPk, Name = competition.Name };
             return rtn;
         }
 
-        public B.Competition AddCompetition(B.Competition competition, string userId)
+        public B.Competition AddCompetition(string userId, B.Competition competition)
         {
             var addedCompetition = competitionRepository.Add(new E.Competition { Name = competition.Name, UserId = userId});
             B.Competition rtn = new B.Competition { Id = addedCompetition.CompetitionIdPk, Name = addedCompetition.Name };
             return rtn;
         }
 
-        public B.Competition EditCompetition(B.Competition competition)
+        public B.Competition UpdateCompetition(string userId, B.Competition competition)
         {
-            var updatedCompetition = competitionRepository.Update(new E.Competition { CompetitionIdPk = competition.Id, Name = competition.Name});
+            var updatedCompetition = competitionRepository.Update(new E.Competition { CompetitionIdPk = competition.Id, Name = competition.Name, UserId = userId});
             B.Competition rtn = new B.Competition { Id = updatedCompetition.CompetitionIdPk, Name = updatedCompetition.Name };
             return rtn;
         }
 
-        public IEnumerable<B.Competition> GetAllCompetitions(string userId)
-        {
-            IEnumerable<B.Competition> rtn = competitionRepository.GetCompetitions(userId)
-                .Select( c => new B.Competition { Id = c.CompetitionIdPk, Name = c.Name });
-
-            return rtn;
-        }
 
         public IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId)
         {
