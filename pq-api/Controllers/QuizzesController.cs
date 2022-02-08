@@ -10,6 +10,7 @@ using pq_api.data.Entities;
 using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
+using System.Security.Claims;
 
 namespace pq_api.Controllers
 {
@@ -20,10 +21,12 @@ namespace pq_api.Controllers
         //private readonly pqsightcom_dev_core_1Context _context;
 
         private IAppService appService;
+        private IHttpContextAccessor httpContextAccessor;
 
-        public QuizzesController(IAppService appService)
+        public QuizzesController(IAppService appService, IHttpContextAccessor httpContextAccessor)
         {
             this.appService = appService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize]
@@ -186,7 +189,8 @@ namespace pq_api.Controllers
                 RoundResult4Id = r.RoundResult4Id
             }).ToList();
 
-            var results = appService.AddQuizResults(res);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var results = appService.AddQuizResults(userId, res);
             var rtn = new List<M.QuizResult>();
 
             foreach (var r in results)

@@ -15,6 +15,7 @@ namespace pq_api.data.Entities
         public int ContestantIdPk { get; set; }
         public int CompetitionIdFk { get; set; }
         public string Name { get; set; }
+        public string UserId { get; set; }
 
         public virtual Competition CompetitionIdFkNavigation { get; set; }
         public virtual ICollection<QuizResult> QuizResults { get; set; }

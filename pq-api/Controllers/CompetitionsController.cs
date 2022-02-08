@@ -87,6 +87,21 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
+        [HttpGet("competitions/{competitionId}/contestants")]
+        public object GetContestants(int competitionId)
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.Contestant> rtn = appService.GetContestantsForCompetition(userId, competitionId).Select(q => new M.Contestant
+            {
+                id = q.Id,
+                competitionId = q.CompetitionId,
+                name = q.Name
+            });
+
+            return rtn;
+        }
+
+        [Authorize]
         [HttpGet("competitions/{id}/competition-results")]
         public  IEnumerable<M.CompetitionResult> GetCompetitionResults(int id)
         {
@@ -105,20 +120,7 @@ namespace pq_api.Controllers
             return rtn;
         }
 
-        [Authorize]
-        [HttpGet("competitions/{competitionId}/contestants")]
-        public object GetContestants(int competitionId)
-        {
-            IEnumerable<M.Contestant> rtn = appService.GetContestantsForCompetition(competitionId).Select(q => new M.Contestant
-            {
-                id = q.Id,
-                competitionId = q.CompetitionId,
-                name = q.Name
-            });
-
-            return rtn;
-        }
-
+        
         [Authorize]
         [HttpGet("competitions/{competitionId}/quizzes")]
         public object GetQuizzes(int competitionId)

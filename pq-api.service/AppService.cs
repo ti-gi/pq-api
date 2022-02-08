@@ -57,6 +57,17 @@ namespace pq_api.service
             return rtn;
         }
 
+        public IEnumerable<B.Contestant> GetContestantsForCompetition(string userId, int CompetitionId)
+        {
+            IEnumerable<B.Contestant> rtn = contestantRepository.GetContestantsForCompetition(userId, CompetitionId).Select(q => new B.Contestant
+            {
+                Id = q.ContestantIdPk,
+                CompetitionId = q.CompetitionIdFk,
+                Name = q.Name
+            });
+
+            return rtn;
+        }
 
         public IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId)
         {
@@ -70,6 +81,131 @@ namespace pq_api.service
             return rtn;
         }
 
+        #endregion
+
+        #region Contestant
+
+        public B.Contestant GetContestant(string userId, int ContestantId)
+        {
+            var contestant = contestantRepository.Get(userId, ContestantId);
+            B.Contestant rtn = new B.Contestant { Id = contestant.ContestantIdPk, Name = contestant.Name, CompetitionId = contestant.CompetitionIdFk };
+            return rtn;
+        }
+
+        public Response<B.Contestant> AddContestant(string userId, B.Contestant contestant)
+        {
+            if (contestantRepository.GetByName(userId, contestant.Name) != null)
+            {
+                return new Response<B.Contestant>
+                {
+                    Data = null,
+                    Message = "Contestant with the same name already exists! Please select different name."
+                };
+            }
+            var addedContestant = contestantRepository.Add(new E.Contestant
+            {
+                Name = contestant.Name,
+                CompetitionIdFk = contestant.CompetitionId,
+                UserId = userId
+            });
+
+            B.Contestant rtn = new B.Contestant
+            {
+                Id = addedContestant.ContestantIdPk,
+                Name = addedContestant.Name,
+                CompetitionId = addedContestant.CompetitionIdFk
+            };
+
+            return new Response<B.Contestant>
+            {
+                Data = rtn,
+                Message = ""
+            };
+        }
+
+        public Response<B.Contestant> EditContestant(string userId, B.Contestant contestant)
+        {
+            if (contestantRepository.GetByName(userId, contestant.Name) != null)
+            {
+                return new Response<B.Contestant>
+                {
+                    Data = null,
+                    Message = "Contestant with the same name already exists! Please select different name."
+                };
+            }
+
+            var updatedContestant = contestantRepository.Update(new E.Contestant
+            {
+                ContestantIdPk = contestant.Id,
+                Name = contestant.Name,
+                CompetitionIdFk = contestant.CompetitionId,
+                UserId = userId
+            });
+
+            B.Contestant rtn = new B.Contestant
+            {
+                Id = updatedContestant.ContestantIdPk,
+                Name = updatedContestant.Name,
+                CompetitionId = updatedContestant.CompetitionIdFk
+            };
+
+            return new Response<B.Contestant>
+            {
+                Data = rtn,
+                Message = ""
+            };
+        }
+
+        public Response<B.Contestant> DeleteContestant(string userId, int id, bool deleteConfirmed)
+        {
+            if (!deleteConfirmed)
+            {
+                if (quizRepository.GetQuizResults().Where(qr => qr.ContestantIdFk == id).Count() > 0)
+                {
+                    return new Response<B.Contestant>
+                    {
+                        Data = null,
+                        Message = "Also delete results related to selected contestant?"
+                    };
+                }
+                else
+                {
+                    return new Response<B.Contestant>
+                    {
+                        Data = null,
+                        Message = "Are you sure you want to delete selected contestant?"
+                    };
+                }
+            }
+
+            else
+            {
+                //delete related results
+                var quizResultsForContestant = quizRepository.GetQuizResults().Where(qr => qr.ContestantIdFk == id);
+                foreach (var item in quizResultsForContestant)
+                {
+                    quizRepository.DeleteQuizResult(item.QuizResultIdPk);
+                }
+
+                //delete contestant
+                var deletedContestant = contestantRepository.Delete(userId, id);
+
+                B.Contestant rtn = new B.Contestant
+                {
+                    Id = deletedContestant.ContestantIdPk,
+                    Name = deletedContestant.Name,
+                    CompetitionId = deletedContestant.CompetitionIdFk
+                };
+
+                return new Response<B.Contestant>
+                {
+                    Data = rtn,
+                    Message = ""
+                };
+
+            }
+
+        }
         #endregion
 
         #region Quiz
@@ -500,13 +636,13 @@ namespace pq_api.service
         //    return rtn;
         //}
 
-        public IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults)
+        public IEnumerable<B.QuizResult> AddQuizResults(string userId, IEnumerable<B.QuizResult> QuizResults)
         {
             List<B.QuizResult> rtn = new List<B.QuizResult>();
 
             foreach (var result in QuizResults)
             {
-                var contestantId = contestantRepository.GetByName(result.Contestant).ContestantIdPk;
+                var contestantId = contestantRepository.GetByName(userId, result.Contestant).ContestantIdPk;
                 var res = quizRepository.AddQuizResult(new E.QuizResult
                 {
                     //QuizResult_ID_PK = result.Id,
@@ -590,133 +726,6 @@ namespace pq_api.service
             };
         }
 
-        #region Contestant
-        public IEnumerable<B.Contestant> GetContestantsForCompetition(int CompetitionId)
-        {
-            IEnumerable<B.Contestant> rtn = contestantRepository.GetContestantsForCompetition(CompetitionId).Select(q => new B.Contestant
-            {
-                Id = q.ContestantIdPk,
-                CompetitionId = q.CompetitionIdFk,
-                Name = q.Name
-            });
-
-            return rtn;
-        }
-
-        public B.Contestant GetContestant(int ContestantId)
-        {
-            var contestant = contestantRepository.Get(ContestantId);
-            B.Contestant rtn = new B.Contestant { Id = contestant.ContestantIdPk, Name = contestant.Name, CompetitionId = contestant.CompetitionIdFk };
-            return rtn;
-        }
-
-        public Response<B.Contestant> AddContestant(B.Contestant contestant)
-        {
-            if(contestantRepository.GetByName(contestant.Name) != null)
-            {
-                return new Response<B.Contestant> { 
-                    Data = null, 
-                    Message = "Contestant with the same name already exists! Please select different name." 
-                };
-            }
-            var addedContestant = contestantRepository.Add(new E.Contestant { 
-                            Name = contestant.Name, 
-                            CompetitionIdFk = contestant.CompetitionId 
-            });
-
-            B.Contestant rtn = new B.Contestant { 
-                Id = addedContestant.ContestantIdPk, 
-                Name = addedContestant.Name, 
-                CompetitionId = addedContestant.CompetitionIdFk 
-            };
-
-            return new Response<B.Contestant> { 
-                Data = rtn, 
-                Message = "" 
-            };
-        }
-
-        public Response<B.Contestant> EditContestant(B.Contestant contestant)
-        {
-            if (contestantRepository.GetByName(contestant.Name) != null)
-            {
-                return new Response<B.Contestant>
-                {
-                    Data = null,
-                    Message = "Contestant with the same name already exists! Please select different name."
-                };
-            }
-
-            var updatedContestant = contestantRepository.Update(new E.Contestant { 
-                        ContestantIdPk = contestant.Id, 
-                        Name = contestant.Name, 
-                        CompetitionIdFk = contestant.CompetitionId 
-            });
-
-            B.Contestant rtn = new B.Contestant { 
-                Id = updatedContestant.ContestantIdPk, 
-                Name = updatedContestant.Name, 
-                CompetitionId = updatedContestant.CompetitionIdFk 
-            };
-
-            return new Response<B.Contestant>
-            {
-                Data = rtn,
-                Message = ""
-            };
-        }
-
-        public Response<B.Contestant> DeleteContestant(int id, bool deleteConfirmed)
-        {
-            if(!deleteConfirmed)
-            {
-                if (quizRepository.GetQuizResults().Where(qr => qr.ContestantIdFk == id).Count() > 0)
-                {
-                    return new Response<B.Contestant>
-                    {
-                        Data = null,
-                        Message = "Also delete results related to selected contestant?"
-                    };
-                }
-                else
-                {
-                    return new Response<B.Contestant>
-                    {
-                        Data = null,
-                        Message = "Are you sure you want to delete selected contestant?"
-                    };
-                }
-            }
-
-            else
-            {
-                //delete related results
-                var quizResultsForContestant = quizRepository.GetQuizResults().Where(qr => qr.ContestantIdFk == id);
-                foreach (var item in quizResultsForContestant)
-                {
-                    quizRepository.DeleteQuizResult(item.QuizResultIdPk);
-                }
-
-                //delete contestant
-                var deletedContestant = contestantRepository.Delete(id);
-
-                B.Contestant rtn = new B.Contestant
-                {
-                    Id = deletedContestant.ContestantIdPk,
-                    Name = deletedContestant.Name,
-                    CompetitionId = deletedContestant.CompetitionIdFk
-                };
-
-                return new Response<B.Contestant>
-                {
-                    Data = rtn,
-                    Message = ""
-                };
-
-            }
-
-            
-        }
-        #endregion
+        
     }
 }

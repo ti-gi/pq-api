@@ -88,6 +88,10 @@ namespace pq_api.data.Entities
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entity.HasOne(d => d.CompetitionIdFkNavigation)
                     .WithMany(p => p.Contestants)
                     .HasForeignKey(d => d.CompetitionIdFk)

@@ -10,6 +10,7 @@ using pq_api.data.Entities;
 using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
+using System.Security.Claims;
 
 namespace pq_api.Controllers
 {
@@ -17,21 +18,22 @@ namespace pq_api.Controllers
     [ApiController]
     public class ContestantsController : ControllerBase
     {
-        //private readonly pqsightcom_dev_core_1Context _context;
 
         private IAppService appService;
+        private IHttpContextAccessor httpContextAccessor;
 
-        public ContestantsController(IAppService appService)
+        public ContestantsController(IAppService appService, IHttpContextAccessor httpContextAccessor)
         {
             this.appService = appService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize]
-        [HttpGet("contestants/{ContestantId}")]
-        public M.Contestant GetContestant(int ContestantId)
+        [HttpGet("contestants/{contestantId}")]
+        public M.Contestant GetContestant(int contestantId)
         {
-
-            var contestant = appService.GetContestant(ContestantId);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var contestant = appService.GetContestant(userId, contestantId);
             return new M.Contestant
             {
                 id = contestant.Id,
@@ -43,10 +45,10 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpPost("contestants/add")]
-        public Response<M.Contestant> CreateContestant(M.ContestantCreate c)
+        public Response<M.Contestant> AddContestant(M.ContestantCreate c)
         {
-
-            var addedContestant = appService.AddContestant(new B.Contestant { Name = c.Name, CompetitionId = c.CompetitionId });
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var addedContestant = appService.AddContestant(userId, new B.Contestant { Name = c.Name, CompetitionId = c.CompetitionId });
             M.Contestant contestant = null;
             if (addedContestant.Data != null)
             {
@@ -71,9 +73,9 @@ namespace pq_api.Controllers
         [HttpPost("contestants/update")]
         public Response<M.Contestant> UpdateContestant(M.ContestantUpdate c)
         {
-
-            var updatedContestant = appService.EditContestant(new B.Contestant { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
-
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var updatedContestant = appService.EditContestant(userId, new B.Contestant { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
+            
             M.Contestant contestant = null;
             if (updatedContestant.Data != null)
             {
@@ -97,7 +99,8 @@ namespace pq_api.Controllers
         [HttpDelete("contestants/delete/{id}")]
         public Response<M.Contestant> DeleteContestant(int id, [FromQuery(Name = "deleteConfirmed")] bool deleteConfirmed)
         {
-            var deletedContestant = appService.DeleteContestant(id, deleteConfirmed);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var deletedContestant = appService.DeleteContestant(userId, id, deleteConfirmed);
             M.Contestant contestant = null;
 
             if (deletedContestant.Data != null)

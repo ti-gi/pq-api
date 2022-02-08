@@ -12,12 +12,12 @@ namespace pq_api.data.Repositories
     public interface IContestantRepository
     {
         IEnumerable<Contestant> GetContestants();
-        IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId);
-        Contestant GetByName(string name);
-        Contestant Get(int id);
+        IEnumerable<Contestant> GetContestantsForCompetition(string userId, int CompetitionId);
+        Contestant GetByName(string userId, string name);
+        Contestant Get(string userId, int id);
         Contestant Add(Contestant entity);
         Contestant Update(Contestant entity);
-        Contestant Delete(int id);
+        Contestant Delete(string userId, int id);
 
     }
 }

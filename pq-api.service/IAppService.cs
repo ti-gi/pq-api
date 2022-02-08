@@ -14,18 +14,24 @@ namespace pq_api.service
         B.Competition GetCompetition(string userId, int CompetitionId);
         B.Competition AddCompetition(string userId, B.Competition competition);
         B.Competition UpdateCompetition(string userId, B.Competition competition);
+        IEnumerable<B.Contestant> GetContestantsForCompetition(string userId, int CompetitionId);
         IEnumerable<B.CompetitionResult> CompetitionResults(int CompetitionId);
+
+        B.Contestant GetContestant(string userId, int ContestantId);
+        Response<B.Contestant> AddContestant(string userId, B.Contestant contestant);
+        Response<B.Contestant> EditContestant(string userId, B.Contestant contestant);
+        Response<B.Contestant> DeleteContestant(string userId, int id, bool deleteConfirmed);
 
         IEnumerable<B.Quiz> GetQuizzes();
         IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId);
-        IEnumerable<B.Contestant> GetContestantsForCompetition(int CompetitionId);
+        
         B.Quiz GetQuiz(int QuizId);
         B.Quiz AddQuiz(B.Quiz quiz);
         B.Quiz EditQuiz(B.Quiz quiz);
 
         IEnumerable<B.QuizResult> GetQuizResults(int QuizId);
         //IEnumerable<B.QuizResult> RefreshQuizResults(int QuizId);
-        IEnumerable<B.QuizResult> AddQuizResults(IEnumerable<B.QuizResult> QuizResults);
+        IEnumerable<B.QuizResult> AddQuizResults(string userId, IEnumerable<B.QuizResult> QuizResults);
         IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
         B.QuizResult DeleteQuizResult(int id);
         IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
@@ -50,10 +56,7 @@ namespace pq_api.service
         //B.RoundResult DeleteRoundResult(int roundResultId);
         //IEnumerable<B.RoundResult> GetRoundResultsForRound(int RoundId);
 
-        B.Contestant GetContestant(int ContestantId);
-        Response<B.Contestant> AddContestant(B.Contestant contestant);
-        Response<B.Contestant> EditContestant(B.Contestant contestant);
-        Response<B.Contestant> DeleteContestant(int id, bool deleteConfirmed);
+
 
     }
 }

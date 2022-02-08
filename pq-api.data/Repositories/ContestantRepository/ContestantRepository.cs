@@ -21,22 +21,22 @@ namespace pq_api.data.Repositories
             return pqEntities.Contestants.ToList();
         }
 
-        public IEnumerable<Contestant> GetContestantsForCompetition(int CompetitionId)
+        public IEnumerable<Contestant> GetContestantsForCompetition(string userId, int CompetitionId)
         {
-            return pqEntities.Contestants.Where(q => q.CompetitionIdFk == CompetitionId).ToList();
+            return pqEntities.Contestants.Where(c => c.UserId == userId && c.CompetitionIdFk == CompetitionId).ToList();
         }
 
-        public Contestant GetByName(string name)
+        public Contestant GetByName(string userId, string name)
         {
-            if (pqEntities.Contestants.Where(q => q.Name == name).Count() > 0)
-                return pqEntities.Contestants.Where(q => q.Name == name).First();
+            if (pqEntities.Contestants.Where(c => c.UserId == userId && c.Name == name).Count() > 0)
+                return pqEntities.Contestants.Where(c => c.UserId == userId && c.Name == name).First();
             else
                 return null;
         }
 
-        public Contestant Get(int id)
+        public Contestant Get(string userId, int id)
         {
-            return pqEntities.Contestants.Where(q => q.ContestantIdPk == id).First();
+            return pqEntities.Contestants.Where(c => c.UserId == userId && c.ContestantIdPk == id).First();
         }
 
         public Contestant Add(Contestant entity)
@@ -57,9 +57,9 @@ namespace pq_api.data.Repositories
             return existingContestant;
         }
 
-        public Contestant Delete(int id)
+        public Contestant Delete(string userId, int id)
         {
-            var contestant = pqEntities.Contestants.Where(r => r.ContestantIdPk == id).First();
+            var contestant = pqEntities.Contestants.Where(c => c.UserId == userId && c.ContestantIdPk == id).First();
             pqEntities.Contestants.Remove(contestant);
             pqEntities.SaveChanges();
             return contestant;
