@@ -113,9 +113,9 @@ namespace pq_api.data.Repositories
         
 
         //#region Round
-        public IEnumerable<Round> GetRoundsForQuiz(int QuizId)
+        public IEnumerable<Round> GetRoundsForQuiz(string userId, int QuizId)
         {
-            return pqEntities.Rounds.Where(q => q.QuizIdFk == QuizId).ToList();
+            return pqEntities.Rounds.Where(r => r.UserId == userId && r.QuizIdFk == QuizId).ToList();
         }
         //#endregion
 

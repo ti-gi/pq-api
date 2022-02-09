@@ -31,7 +31,8 @@ namespace pq_api.Controllers
         [HttpGet("rounds")]
         public IEnumerable<M.Round> GetQuizzes()
         {
-            IEnumerable<M.Round> rtn = appService.GetRounds().Select(q => new M.Round
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.Round> rtn = appService.GetRounds(userId).Select(q => new M.Round
             {
                 id = q.Id,
                 quizId = q.QuizId,
@@ -46,8 +47,8 @@ namespace pq_api.Controllers
         [HttpGet("rounds/{RoundId}")]
         public M.Round GetRound(int RoundId)
         {
-
-            var round = appService.GetRound(RoundId);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var round = appService.GetRound(userId, RoundId);
             return new M.Round
             {
                 id = round.Id,
@@ -62,8 +63,8 @@ namespace pq_api.Controllers
         [HttpPost("rounds/add")]
         public M.Round CreateRound(M.RoundCreate r)
         {
-
-            var addedRound = appService.AddRound(new B.Round { Name = r.Name, QuizId = r.QuizId });
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var addedRound = appService.AddRound(userId, new B.Round { Name = r.Name, QuizId = r.QuizId });
             return new M.Round
             {
                 id = addedRound.Id,
@@ -77,8 +78,8 @@ namespace pq_api.Controllers
         [HttpPost("rounds/update")]
         public M.Round UpdateQuiz(M.RoundUpdate r)
         {
-
-            var updatedRound = appService.EditRound(new B.Round { Id = r.Id, Name = r.Name, QuizId = r.QuizId });
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var updatedRound = appService.EditRound(userId, new B.Round { Id = r.Id, Name = r.Name, QuizId = r.QuizId });
             return new M.Round
             {
                 id = updatedRound.Id,

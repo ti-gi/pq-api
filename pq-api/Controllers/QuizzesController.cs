@@ -95,7 +95,8 @@ namespace pq_api.Controllers
         [HttpGet("quizzes/{QuizId}/rounds")]
         public IEnumerable<M.Round> GetRounds(int QuizId)
         {
-            var results = appService.GetRoundsForQuiz(QuizId).Select(r => new M.Round
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var results = appService.GetRoundsForQuiz(userId, QuizId).Select(r => new M.Round
             {
                 id = r.Id,
                 quizId = r.QuizId,

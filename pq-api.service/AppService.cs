@@ -165,7 +165,7 @@ namespace pq_api.service
                     return new Response<B.Contestant>
                     {
                         Data = null,
-                        Message = "Also delete results related to selected contestant?"
+                        Message = "Results related to selected contestant will also be deleted. Do you want to continue?"
                     };
                 }
                 else
@@ -388,11 +388,10 @@ namespace pq_api.service
         }
         #endregion Quiz
 
-        //Rounds
+        #region Rounds
 
-        public IEnumerable<B.Round> GetRounds()
+        public IEnumerable<B.Round> GetRounds(string userId)
         {
-            string userId = "";
             IEnumerable<B.Round> rtn = roundRepository.All(userId).Select(q => new B.Round
             {
                 Id = q.RoundIdPk,
@@ -402,30 +401,30 @@ namespace pq_api.service
 
             return rtn;
         }
-        public B.Round GetRound(int RoundId)
+        public B.Round GetRound(string userId, int roundId)
         {
-            var round = roundRepository.Get(RoundId);
+            var round = roundRepository.Get(userId, roundId);
             B.Round rtn = new B.Round { Id = round.RoundIdPk, Name = round.Name, QuizId = round.QuizIdFk };
             return rtn;
         }
 
-        public B.Round AddRound(B.Round round)
+        public B.Round AddRound(string userId, B.Round round)
         {
-            var addedRound = roundRepository.Add(new E.Round { Name = round.Name, QuizIdFk = round.QuizId });
+            var addedRound = roundRepository.Add(new E.Round { Name = round.Name, QuizIdFk = round.QuizId, UserId = userId });
             B.Round rtn = new B.Round { Id = addedRound.RoundIdPk, Name = addedRound.Name, QuizId = addedRound.QuizIdFk };
             return rtn;
         }
 
-        public B.Round EditRound(B.Round round)
+        public B.Round EditRound(string userId, B.Round round)
         {
-            var updatedRound = roundRepository.Update(new E.Round { RoundIdPk = round.Id, Name = round.Name, QuizIdFk = round.QuizId });
+            var updatedRound = roundRepository.Update(new E.Round { RoundIdPk = round.Id, Name = round.Name, QuizIdFk = round.QuizId, UserId = userId });
             B.Round rtn = new B.Round { Id = updatedRound.RoundIdPk, Name = updatedRound.Name, QuizId = updatedRound.QuizIdFk };
             return rtn;
         }
 
-        public IEnumerable<B.Round> GetRoundsForQuiz(int QuizId)
+        public IEnumerable<B.Round> GetRoundsForQuiz(string userId, int QuizId)
         {
-            IEnumerable<B.Round> rtn = quizRepository.GetRoundsForQuiz(QuizId).Select(q => new B.Round
+            IEnumerable<B.Round> rtn = quizRepository.GetRoundsForQuiz(userId, QuizId).Select(q => new B.Round
             {
                 Id = q.RoundIdPk,
                 QuizId = q.QuizIdFk,
@@ -434,6 +433,7 @@ namespace pq_api.service
 
             return rtn;
         }
+        #endregion
 
         #region Questions
         public IEnumerable<B.Question> GetQuestionsForRound(string userId, int roundId)

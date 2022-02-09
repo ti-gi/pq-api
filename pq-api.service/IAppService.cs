@@ -35,11 +35,11 @@ namespace pq_api.service
         B.QuizResult DeleteQuizResult(string userId, int id);
         IEnumerable<B.QuizResultFinal> QuizResultsFinal(string userId, int QuizId);
 
-        IEnumerable<B.Round> GetRounds();
-        B.Round GetRound(int RoundId);
-        B.Round AddRound(B.Round entity);
-        B.Round EditRound(B.Round entity);
-        IEnumerable<B.Round> GetRoundsForQuiz(int QuizId);
+        IEnumerable<B.Round> GetRounds(string userId);
+        B.Round GetRound(string userId, int RoundId);
+        B.Round AddRound(string userId, B.Round entity);
+        B.Round EditRound(string userId, B.Round entity);
+        IEnumerable<B.Round> GetRoundsForQuiz(string userId, int QuizId);
 
         IEnumerable<B.Question> GetQuestionsForRound(string userId, int roundId);
         B.Question GetQuestion(string userId, int QuestionId);
