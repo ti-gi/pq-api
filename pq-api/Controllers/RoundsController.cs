@@ -10,6 +10,7 @@ using pq_api.data.Entities;
 using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
+using System.Security.Claims;
 
 namespace pq_api.Controllers
 {
@@ -17,13 +18,13 @@ namespace pq_api.Controllers
     [ApiController]
     public class RoundsController : ControllerBase
     {
-        //private readonly pqsightcom_dev_core_1Context _context;
-
         private IAppService appService;
+        private IHttpContextAccessor httpContextAccessor;
 
-        public RoundsController(IAppService appService)
+        public RoundsController(IAppService appService, IHttpContextAccessor httpContextAccessor)
         {
             this.appService = appService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize]
@@ -91,7 +92,8 @@ namespace pq_api.Controllers
         [HttpGet("rounds/{roundId}/questions")]
         public IEnumerable<M.Question> GetQuestionForRound(int roundId)
         {
-            IEnumerable<M.Question> rtn = appService.GetQuestionsForRound(roundId).Select(q => new M.Question
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.Question> rtn = appService.GetQuestionsForRound(userId, roundId).Select(q => new M.Question
             {
                 id = q.Id,
                 roundId = q.RoundId,

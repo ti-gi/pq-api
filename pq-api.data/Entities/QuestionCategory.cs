@@ -10,6 +10,7 @@ namespace pq_api.data.Entities
         public int QuestionCategoryIdPk { get; set; }
         public int QuestionIdFk { get; set; }
         public int CategoryIdFk { get; set; }
+        public string UserId { get; set; }
 
         public virtual Category CategoryIdFkNavigation { get; set; }
         public virtual Question QuestionIdFkNavigation { get; set; }

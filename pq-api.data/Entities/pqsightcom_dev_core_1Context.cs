@@ -55,6 +55,10 @@ namespace pq_api.data.Entities
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<Competition>(entity =>
@@ -127,6 +131,10 @@ namespace pq_api.data.Entities
 
                 entity.Property(e => e.RoundIdFk).HasColumnName("Round_ID_FK");
 
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entity.HasOne(d => d.RoundIdFkNavigation)
                     .WithMany(p => p.Questions)
                     .HasForeignKey(d => d.RoundIdFk)
@@ -146,6 +154,10 @@ namespace pq_api.data.Entities
                 entity.Property(e => e.CategoryIdFk).HasColumnName("Category_ID_FK");
 
                 entity.Property(e => e.QuestionIdFk).HasColumnName("Question_ID_FK");
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.HasOne(d => d.CategoryIdFkNavigation)
                     .WithMany(p => p.QuestionCategories)

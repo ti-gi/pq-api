@@ -10,6 +10,7 @@ using pq_api.data.Entities;
 using M = pq_api.Models;
 using B = pq_api.service.BusinessModels;
 using pq_api.service;
+using System.Security.Claims;
 
 namespace pq_api.Controllers
 {
@@ -17,37 +18,21 @@ namespace pq_api.Controllers
     [ApiController]
     public class QuestionsController : ControllerBase
     {
-        //private readonly pqsightcom_dev_core_1Context _context;
-
         private IAppService appService;
+        private IHttpContextAccessor httpContextAccessor;
 
-        public QuestionsController(IAppService appService)
+        public QuestionsController(IAppService appService, IHttpContextAccessor httpContextAccessor)
         {
             this.appService = appService;
-        }
-
-
-        [Authorize]
-        [HttpGet("questions/categories")]
-        public IEnumerable<M.Category> GetCategories()
-        {
-
-            var categories = appService.GetCategories().Select(c => new M.Category
-            {
-                Id = c.Id,
-                Name = c.Name
-            });
-
-            return categories;
-
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize]
         [HttpGet("questions/{QuestionId}")]
         public M.Question GetQuestion(int QuestionId)
         {
-
-            var question = appService.GetQuestion(QuestionId);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var question = appService.GetQuestion(userId, QuestionId);
             var questionCategories = question.Categories.Select(c => new M.Category
             {
                 Id = c.Id,
@@ -77,7 +62,8 @@ namespace pq_api.Controllers
                 categories.Add(new B.Category { Id = item.Id, Name = item.Name });
             }
 
-            var addedQuestion = appService.AddQuestion(new B.Question { Question1 = q.Question, Answer = q.Answer, RoundId = q.RoundId, Categories = categories, QuestionDifficulty = q.QuestionDifficulty });
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var addedQuestion = appService.AddQuestion(userId, new B.Question { Question1 = q.Question, Answer = q.Answer, RoundId = q.RoundId, Categories = categories, QuestionDifficulty = q.QuestionDifficulty });
             return new M.Question
             {
                 id = addedQuestion.Id,
@@ -98,7 +84,8 @@ namespace pq_api.Controllers
                 categories.Add(new B.Category { Id = item.Id, Name = item.Name });
             }
 
-            var updatedQuestion = appService.EditQuestion(new B.Question
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var updatedQuestion = appService.EditQuestion(userId, new B.Question
             {
                 Id = q.Id,
                 Question1 = q.Question,
@@ -114,6 +101,21 @@ namespace pq_api.Controllers
                 question = updatedQuestion.Question1,
                 answer = updatedQuestion.Answer
             };
+
+        }
+
+        [Authorize]
+        [HttpGet("questions/categories")]
+        public IEnumerable<M.Category> GetCategories()
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var categories = appService.GetCategories(userId).Select(c => new M.Category
+            {
+                Id = c.Id,
+                Name = c.Name
+            });
+
+            return categories;
 
         }
 
