@@ -125,7 +125,8 @@ namespace pq_api.Controllers
         [HttpGet("competitions/{competitionId}/quizzes")]
         public object GetQuizzes(int competitionId)
         {
-            IEnumerable<M.Quiz> rtn = appService.GetQuizzesForCompetition(competitionId).Select(q => new M.Quiz
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.Quiz> rtn = appService.GetQuizzesForCompetition(userId, competitionId).Select(q => new M.Quiz
             {
                 id = q.Id,
                 competitionId = q.CompetitionId,

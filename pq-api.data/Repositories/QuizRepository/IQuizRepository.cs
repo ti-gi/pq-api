@@ -8,15 +8,15 @@ using pq_api.data.Entities;
 
 namespace pq_api.data.Repositories
 {
-    public interface IQuizRepository : IQuizResultRepository
+    public interface IQuizRepository : IQuizResultRepository, IQuizResultFinalRepository
     {
         IEnumerable<Quiz> GetQuizzes(string userId);
-        IEnumerable<Quiz> GetQuizzesForCompetition(int CompetitionId);
-        Quiz Get(int id);
+        IEnumerable<Quiz> GetQuizzesForCompetition(string userId, int CompetitionId);
+        Quiz Get(string userId, int id);
         Quiz Add(Quiz entity);
         Quiz Update(Quiz entity);
         
         IEnumerable<Round> GetRoundsForQuiz(int QuizId);
-        IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId);
+        
     }
 }

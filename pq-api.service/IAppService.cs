@@ -22,19 +22,18 @@ namespace pq_api.service
         Response<B.Contestant> EditContestant(string userId, B.Contestant contestant);
         Response<B.Contestant> DeleteContestant(string userId, int id, bool deleteConfirmed);
 
-        IEnumerable<B.Quiz> GetQuizzes();
-        IEnumerable<B.Quiz> GetQuizzesForCompetition(int CompetitionId);
-        
-        B.Quiz GetQuiz(int QuizId);
-        B.Quiz AddQuiz(B.Quiz quiz);
-        B.Quiz EditQuiz(B.Quiz quiz);
+        IEnumerable<B.Quiz> GetQuizzes(string userId);
+        IEnumerable<B.Quiz> GetQuizzesForCompetition(string userId, int CompetitionId);
+        B.Quiz GetQuiz(string userId, int QuizId);
+        B.Quiz AddQuiz(string userId, B.Quiz quiz);
+        B.Quiz EditQuiz(string userId, B.Quiz quiz);
 
-        IEnumerable<B.QuizResult> GetQuizResults(int QuizId);
+        IEnumerable<B.QuizResult> GetQuizResults(string userId, int QuizId);
         //IEnumerable<B.QuizResult> RefreshQuizResults(int QuizId);
         IEnumerable<B.QuizResult> AddQuizResults(string userId, IEnumerable<B.QuizResult> QuizResults);
-        IEnumerable<B.QuizResult> UpdateQuizResults(IEnumerable<B.QuizResult> QuizResults);
-        B.QuizResult DeleteQuizResult(int id);
-        IEnumerable<B.QuizResultFinal> QuizResultsFinal(int QuizId);
+        IEnumerable<B.QuizResult> UpdateQuizResults(string userId, IEnumerable<B.QuizResult> QuizResults);
+        B.QuizResult DeleteQuizResult(string userId, int id);
+        IEnumerable<B.QuizResultFinal> QuizResultsFinal(string userId, int QuizId);
 
         IEnumerable<B.Round> GetRounds();
         B.Round GetRound(int RoundId);

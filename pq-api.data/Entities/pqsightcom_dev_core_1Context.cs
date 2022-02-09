@@ -186,6 +186,10 @@ namespace pq_api.data.Entities
                     .IsRequired()
                     .HasMaxLength(150);
 
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entity.HasOne(d => d.CompetitionIdFkNavigation)
                     .WithMany(p => p.Quizzes)
                     .HasForeignKey(d => d.CompetitionIdFk)
@@ -244,6 +248,10 @@ namespace pq_api.data.Entities
                 entity.Property(e => e.RoundResult3IdFk).HasColumnName("RoundResult_3_ID_FK");
 
                 entity.Property(e => e.RoundResult4IdFk).HasColumnName("RoundResult_4_ID_FK");
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.HasOne(d => d.ContestantIdFkNavigation)
                     .WithMany(p => p.QuizResults)

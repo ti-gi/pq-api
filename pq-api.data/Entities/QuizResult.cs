@@ -22,6 +22,7 @@ namespace pq_api.data.Entities
         public decimal? Round4Points { get; set; }
         public decimal? PointsAfterRound4 { get; set; }
         public int? RoundResult4IdFk { get; set; }
+        public string UserId { get; set; }
 
         public virtual Contestant ContestantIdFkNavigation { get; set; }
         public virtual Quiz QuizIdFkNavigation { get; set; }

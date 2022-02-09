@@ -33,7 +33,8 @@ namespace pq_api.Controllers
         [HttpGet("quizzes")]
         public IEnumerable<M.Quiz> GetQuizzes()
         {
-            IEnumerable<M.Quiz> rtn = appService.GetQuizzes().Select(q => new M.Quiz
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.Quiz> rtn = appService.GetQuizzes(userId).Select(q => new M.Quiz
             {
                 id = q.Id,
                 competitionId = q.CompetitionId,
@@ -48,8 +49,8 @@ namespace pq_api.Controllers
         [HttpGet("quizzes/{QuizId}")]
         public M.Quiz GetQuiz(int QuizId)
         {
-
-            var quiz = appService.GetQuiz(QuizId);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var quiz = appService.GetQuiz(userId, QuizId);
             return new M.Quiz
             {
                 id = quiz.Id,
@@ -64,8 +65,8 @@ namespace pq_api.Controllers
         [HttpPost("quizzes/add")]
         public M.Quiz CreateQuiz(M.QuizCreate c)
         {
-
-            var addedQuiz = appService.AddQuiz(new B.Quiz { Name = c.Name, CompetitionId = c.CompetitionId });
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var addedQuiz = appService.AddQuiz(userId, new B.Quiz { Name = c.Name, CompetitionId = c.CompetitionId });
             return new M.Quiz
             {
                 id = addedQuiz.Id,
@@ -79,8 +80,8 @@ namespace pq_api.Controllers
         [HttpPost("quizzes/update")]
         public M.Quiz UpdateQuiz(M.QuizUpdate c)
         {
-
-            var updatedQuiz = appService.EditQuiz(new B.Quiz { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var updatedQuiz = appService.EditQuiz(userId, new B.Quiz { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
             return new M.Quiz
             {
                 id = updatedQuiz.Id,
@@ -109,7 +110,8 @@ namespace pq_api.Controllers
         [HttpGet("quizzes/{QuizId}/quiz-results-final")]
         public IEnumerable<M.QuizResultFinal> CompetitionResults(int QuizId)
         {
-            var results = appService.QuizResultsFinal(QuizId);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var results = appService.QuizResultsFinal(userId, QuizId);
             var rtn = new List<M.QuizResultFinal>();
 
             foreach (var r in results)
@@ -128,7 +130,8 @@ namespace pq_api.Controllers
         [HttpGet("quizzes/{QuizId}/quizresults")]
         public IEnumerable<M.QuizResult> GetQuizResults(int QuizId)
         {
-            var results = appService.GetQuizResults(QuizId);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var results = appService.GetQuizResults(userId, QuizId);
             var rtn = new List<M.QuizResult>();
 
             foreach (var r in results)
@@ -249,7 +252,8 @@ namespace pq_api.Controllers
                 RoundResult4Id = r.RoundResult4Id
             }).ToList();
 
-            var results = appService.UpdateQuizResults(res);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var results = appService.UpdateQuizResults(userId, res);
             var rtn = new List<M.QuizResult>();
 
             foreach (var r in results)
@@ -285,7 +289,8 @@ namespace pq_api.Controllers
         [HttpDelete("quizzes/{QuizId}/delete-quiz-result/{id}")]
         public M.QuizResult DeleteQuizResult(int id)
         {
-            var r = appService.DeleteQuizResult(id);
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var r = appService.DeleteQuizResult(userId, id);
 
             return new M.QuizResult
             {

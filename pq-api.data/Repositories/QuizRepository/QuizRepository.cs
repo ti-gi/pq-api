@@ -20,12 +20,17 @@ namespace pq_api.data.Repositories
         #region Quiz
         public IEnumerable<Quiz> GetQuizzes(string userId)
         {
-            return pqEntities.Quizzes.ToList();
+            return pqEntities.Quizzes.Where(q => q.UserId == userId).ToList();
         }
 
-        public IEnumerable<Quiz> GetQuizzesForCompetition(int CompetitionId)
+        public IEnumerable<Quiz> GetQuizzesForCompetition(string userId, int CompetitionId)
         {
-            return pqEntities.Quizzes.Where(q => q.CompetitionIdFk == CompetitionId).ToList();
+            return pqEntities.Quizzes.Where(q => q.UserId == userId && q.CompetitionIdFk == CompetitionId).ToList();
+        }
+
+        public Quiz Get(string userId, int id)
+        {
+            return pqEntities.Quizzes.Where(q => q.UserId == userId && q.QuizIdPk == id).First();
         }
 
         public Quiz Add(Quiz entity)
@@ -37,7 +42,7 @@ namespace pq_api.data.Repositories
 
         public Quiz Update(Quiz entity)
         {
-            var existingQuiz = pqEntities.Quizzes.Where(q => q.QuizIdPk == entity.QuizIdPk).FirstOrDefault();
+            var existingQuiz = pqEntities.Quizzes.Where(q => q.UserId == entity.UserId && q.QuizIdPk == entity.QuizIdPk).FirstOrDefault();
             if (existingQuiz != null)
             {
                 existingQuiz.Name = entity.Name;
@@ -46,49 +51,18 @@ namespace pq_api.data.Repositories
             return existingQuiz;
         }
 
-       
-
-        public IEnumerable<Quiz> Find(Expression<Func<Quiz, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Quiz Get(int id)
-        {
-            return pqEntities.Quizzes.Where(q => q.QuizIdPk == id).First();
-        }
-
-        public void SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
         #endregion
 
-        //#region Round
-        public IEnumerable<Round> GetRoundsForQuiz(int QuizId)
+        #region  QuizResults
+        public IEnumerable<QuizResult> GetQuizResults(string userId)
         {
-            return pqEntities.Rounds.Where(q => q.QuizIdFk == QuizId).ToList();
-        }
-        //#endregion
-
-        //#region  QuizResults
-        public IEnumerable<QuizResult> GetQuizResults()
-        {
-            return pqEntities.QuizResults.Include(q => q.ContestantIdFkNavigation).ToList();
+            return pqEntities.QuizResults.Include(q => q.ContestantIdFkNavigation).Where(q => q.UserId == userId).ToList();
         }
 
-        public IEnumerable<QuizResult> GetQuizResults(int QuizId)
+        public IEnumerable<QuizResult> GetQuizResults(string userId, int QuizId)
         {
-            return pqEntities.QuizResults.Include( q => q.ContestantIdFkNavigation).Where(qr => qr.QuizIdFk == QuizId).ToList();
+            return pqEntities.QuizResults.Include( q => q.ContestantIdFkNavigation).Where(qr => qr.UserId == userId && qr.QuizIdFk == QuizId).ToList();
         }
-
-        //public IEnumerable<QuizResult> RefreshQuizResults(int QuizId)
-        //{
-        //    return pqEntities.Refresh_QuizResults(QuizId);
-        //}
 
         public QuizResult AddQuizResult(QuizResult entity)
         {
@@ -118,13 +92,17 @@ namespace pq_api.data.Repositories
             return existingQuizResult;
         }
 
-        public QuizResult DeleteQuizResult(int id)
+        public QuizResult DeleteQuizResult(string userId, int id)
         {
-            var quizResult = pqEntities.QuizResults.Where(r => r.QuizResultIdPk == id).First();
+            var quizResult = pqEntities.QuizResults.Where(r => r.UserId == userId && r.QuizResultIdPk == id).First();
             pqEntities.QuizResults.Remove(quizResult);
             pqEntities.SaveChanges();
             return quizResult;
         }
+
+        #endregion
+
+
 
         public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
         {
@@ -132,6 +110,13 @@ namespace pq_api.data.Repositories
         }
 
 
+        
+
+        //#region Round
+        public IEnumerable<Round> GetRoundsForQuiz(int QuizId)
+        {
+            return pqEntities.Rounds.Where(q => q.QuizIdFk == QuizId).ToList();
+        }
         //#endregion
 
     }
