@@ -28,11 +28,11 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
-        [HttpGet("questions/{QuestionId}")]
-        public M.Question GetQuestion(int QuestionId)
+        [HttpGet("questions/{questionId}")]
+        public M.Question GetQuestion(int questionId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var question = appService.GetQuestion(userId, QuestionId);
+            var question = appService.GetQuestion(userId, questionId);
             var questionCategories = question.Categories.Select(c => new M.Category
             {
                 Id = c.Id,
@@ -54,7 +54,7 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpPost("questions/add")]
-        public M.Question CreateQuestion(M.QuestionCreate q)
+        public M.Question AddQuestion(M.QuestionCreate q)
         {
             var categories = new List<B.Category>();
             foreach (var item in q.Categories)
@@ -85,7 +85,7 @@ namespace pq_api.Controllers
             }
 
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var updatedQuestion = appService.EditQuestion(userId, new B.Question
+            var updatedQuestion = appService.UpdateQuestion(userId, new B.Question
             {
                 Id = q.Id,
                 Question1 = q.Question,

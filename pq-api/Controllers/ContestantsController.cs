@@ -74,7 +74,7 @@ namespace pq_api.Controllers
         public Response<M.Contestant> UpdateContestant(M.ContestantUpdate c)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var updatedContestant = appService.EditContestant(userId, new B.Contestant { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
+            var updatedContestant = appService.UpdateContestant(userId, new B.Contestant { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
             
             M.Contestant contestant = null;
             if (updatedContestant.Data != null)

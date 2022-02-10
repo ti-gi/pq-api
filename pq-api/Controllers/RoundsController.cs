@@ -29,7 +29,7 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpGet("rounds")]
-        public IEnumerable<M.Round> GetQuizzes()
+        public IEnumerable<M.Round> GetRounds()
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             IEnumerable<M.Round> rtn = appService.GetRounds(userId).Select(q => new M.Round
@@ -61,7 +61,7 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpPost("rounds/add")]
-        public M.Round CreateRound(M.RoundCreate r)
+        public M.Round AddRound(M.RoundCreate r)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var addedRound = appService.AddRound(userId, new B.Round { Name = r.Name, QuizId = r.QuizId });
@@ -76,10 +76,10 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpPost("rounds/update")]
-        public M.Round UpdateQuiz(M.RoundUpdate r)
+        public M.Round UpdateRound(M.RoundUpdate r)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var updatedRound = appService.EditRound(userId, new B.Round { Id = r.Id, Name = r.Name, QuizId = r.QuizId });
+            var updatedRound = appService.UpdateRound(userId, new B.Round { Id = r.Id, Name = r.Name, QuizId = r.QuizId });
             return new M.Round
             {
                 id = updatedRound.Id,

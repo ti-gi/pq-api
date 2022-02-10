@@ -100,24 +100,13 @@ namespace pq_api.data.Repositories
             return quizResult;
         }
 
-        #endregion
-
-
 
         public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
         {
             return pqEntities.QuizResultFinal.FromSqlRaw("Get_QuizResults @p0", QuizId).ToList();
         }
 
-
-        
-
-        //#region Round
-        public IEnumerable<Round> GetRoundsForQuiz(string userId, int QuizId)
-        {
-            return pqEntities.Rounds.Where(r => r.UserId == userId && r.QuizIdFk == QuizId).ToList();
-        }
-        //#endregion
+        #endregion
 
     }
 

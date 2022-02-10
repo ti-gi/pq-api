@@ -20,6 +20,11 @@ namespace pq_api.data.Repositories
             return pqEntities.Rounds.ToList();
         }
 
+        public IEnumerable<Round> GetRoundsForQuiz(string userId, int QuizId)
+        {
+            return pqEntities.Rounds.Where(r => r.UserId == userId && r.QuizIdFk == QuizId).ToList();
+        }
+
         public Round Get(string userId, int id)
         {
             return pqEntities.Rounds.Where(q => q.RoundIdPk == id).First();

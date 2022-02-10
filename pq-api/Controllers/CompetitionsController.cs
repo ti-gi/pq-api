@@ -32,7 +32,7 @@ namespace pq_api.Controllers
         public IEnumerable<M.Competition> GetCompetitions()
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var results = appService.GetAllCompetitions(userId);
+            var results = appService.GetCompetitions(userId);
             var rtn = new List<M.Competition>();
 
             foreach (var r in results)
@@ -88,7 +88,7 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpGet("competitions/{competitionId}/contestants")]
-        public object GetContestants(int competitionId)
+        public object GetContestantsForCompetition(int competitionId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             IEnumerable<M.Contestant> rtn = appService.GetContestantsForCompetition(userId, competitionId).Select(q => new M.Contestant
@@ -105,7 +105,7 @@ namespace pq_api.Controllers
         [HttpGet("competitions/{id}/competition-results")]
         public  IEnumerable<M.CompetitionResult> GetCompetitionResults(int id)
         {
-            var results = appService.CompetitionResults(id);
+            var results = appService.GetCompetitionResults(id);
             var rtn = new List<M.CompetitionResult>();
 
             foreach (var r in results)
@@ -123,7 +123,7 @@ namespace pq_api.Controllers
         
         [Authorize]
         [HttpGet("competitions/{competitionId}/quizzes")]
-        public object GetQuizzes(int competitionId)
+        public object GetQuizzesForCompetition(int competitionId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             IEnumerable<M.Quiz> rtn = appService.GetQuizzesForCompetition(userId, competitionId).Select(q => new M.Quiz

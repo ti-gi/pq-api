@@ -17,6 +17,7 @@ namespace pq_api.data.Repositories
             pqEntities = Entities;
         }
 
+        #region Question
         public IEnumerable<Question> GetQuestions(string userId)
         {
             return pqEntities.Questions.Where(q => q.UserId == userId).ToList();
@@ -52,8 +53,9 @@ namespace pq_api.data.Repositories
             pqEntities.SaveChanges();
             return existingQuestion;
         }
+        #endregion
 
-       
+        #region QuestionCategory
         public IEnumerable<QuestionCategory> GetCategoriesForQuestion(string userId, int QuestionId)
         {
             return pqEntities.QuestionCategories.Include(q => q.CategoryIdFkNavigation).Where(q => q.UserId == userId && q.QuestionIdFk == QuestionId).ToList();
@@ -78,7 +80,7 @@ namespace pq_api.data.Repositories
         {
             return pqEntities.QuestionCategories.Where(qc => qc.UserId == userId && qc.QuestionIdFk == id).ToList();
         }
-
+        #endregion
 
         #region Category
         public IEnumerable<Category> GetCategories(string userId)
@@ -94,12 +96,6 @@ namespace pq_api.data.Repositories
         }
 
         #endregion
-
-        public void SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-        
+   
     }
 }

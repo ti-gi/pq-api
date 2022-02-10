@@ -16,7 +16,5 @@ namespace pq_api.data.Repositories
         Quiz Add(Quiz entity);
         Quiz Update(Quiz entity);
         
-        IEnumerable<Round> GetRoundsForQuiz(string userId, int QuizId);
-        
     }
 }

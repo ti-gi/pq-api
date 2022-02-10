@@ -18,8 +18,6 @@ namespace pq_api.data.Repositories
         public CompetitionRepository(pqsightcom_dev_core_1Context Entities)
         {
             pqEntities = Entities;
-
-            //pqEntities = new pqEntities("pqEntities2");
         }
 
         public IEnumerable<Competition> GetCompetitions(string userId)

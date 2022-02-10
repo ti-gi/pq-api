@@ -18,8 +18,6 @@ namespace pq_api.Controllers
     [ApiController]
     public class QuizzesController : ControllerBase
     {
-        //private readonly pqsightcom_dev_core_1Context _context;
-
         private IAppService appService;
         private IHttpContextAccessor httpContextAccessor;
 
@@ -63,7 +61,7 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpPost("quizzes/add")]
-        public M.Quiz CreateQuiz(M.QuizCreate c)
+        public M.Quiz AddQuiz(M.QuizCreate c)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var addedQuiz = appService.AddQuiz(userId, new B.Quiz { Name = c.Name, CompetitionId = c.CompetitionId });
@@ -73,7 +71,6 @@ namespace pq_api.Controllers
                 name = addedQuiz.Name
 
             };
-
         }
 
         [Authorize]
@@ -81,7 +78,7 @@ namespace pq_api.Controllers
         public M.Quiz UpdateQuiz(M.QuizUpdate c)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var updatedQuiz = appService.EditQuiz(userId, new B.Quiz { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
+            var updatedQuiz = appService.UpdateQuiz(userId, new B.Quiz { Id = c.Id, Name = c.Name, CompetitionId = c.CompetitionId });
             return new M.Quiz
             {
                 id = updatedQuiz.Id,
@@ -92,11 +89,11 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
-        [HttpGet("quizzes/{QuizId}/rounds")]
-        public IEnumerable<M.Round> GetRounds(int QuizId)
+        [HttpGet("quizzes/{quizId}/rounds")]
+        public IEnumerable<M.Round> GetRoundsForQuiz(int quizId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var results = appService.GetRoundsForQuiz(userId, QuizId).Select(r => new M.Round
+            var results = appService.GetRoundsForQuiz(userId, quizId).Select(r => new M.Round
             {
                 id = r.Id,
                 quizId = r.QuizId,
@@ -109,10 +106,10 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpGet("quizzes/{QuizId}/quiz-results-final")]
-        public IEnumerable<M.QuizResultFinal> CompetitionResults(int QuizId)
+        public IEnumerable<M.QuizResultFinal>GetQuizResultsFinal(int QuizId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var results = appService.QuizResultsFinal(userId, QuizId);
+            var results = appService.GetQuizResultsFinal(userId, QuizId);
             var rtn = new List<M.QuizResultFinal>();
 
             foreach (var r in results)
@@ -128,7 +125,7 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
-        [HttpGet("quizzes/{QuizId}/quizresults")]
+        [HttpGet("quizzes/{QuizId}/quiz-results")]
         public IEnumerable<M.QuizResult> GetQuizResults(int QuizId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
