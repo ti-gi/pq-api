@@ -28,6 +28,24 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
+        [HttpGet("questions")]
+        public IEnumerable<M.Question> GetQuestions()
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.Question> rtn = appService.GetQuestions(userId).Select(q => new M.Question
+            {
+                id = q.Id,
+                roundId = q.RoundId,
+                question = q.Question1,
+                answer = q.Answer,
+                Categories = q.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                QuestionDifficulty = q.QuestionDifficulty
+            });
+
+            return rtn;
+        }
+
+        [Authorize]
         [HttpGet("questions/{questionId}")]
         public M.Question GetQuestion(int questionId)
         {

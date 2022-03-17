@@ -48,6 +48,7 @@ namespace pq_api.service
         #endregion
 
         #region Questions
+        IEnumerable<B.Question> GetQuestions(string userId);
         IEnumerable<B.Question> GetQuestionsForRound(string userId, int roundId);
         B.Question GetQuestion(string userId, int questionId);
         B.Question AddQuestion(string userId, B.Question question);

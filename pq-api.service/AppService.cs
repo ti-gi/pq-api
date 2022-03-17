@@ -159,7 +159,7 @@ namespace pq_api.service
                     return new Response<B.Contestant>
                     {
                         Data = null,
-                        Message = "Results related to selected contestant will also be deleted. Do you want to continue?"
+                        Message = "Results for selected contestant will also be deleted. Do you want to continue?"
                     };
                 }
                 else
@@ -416,6 +416,23 @@ namespace pq_api.service
         #endregion
 
         #region Questions
+
+        public IEnumerable<B.Question> GetQuestions(string userId)
+        {
+            IEnumerable<B.Question> rtn = questionRepository.GetQuestions(userId).Select(q => new B.Question
+            {
+                Id = q.QuestionIdPk,
+                RoundId = q.RoundIdFk,
+                Question1 = q.Question1,
+                Answer = q.Answer,
+                Categories = q.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
+                QuestionDifficulty = q.QuestionDifficulty
+
+            });
+
+            return rtn;
+        }
+
         public IEnumerable<B.Question> GetQuestionsForRound(string userId, int roundId)
         {
             IEnumerable<B.Question> rtn = questionRepository.GetQuestionsForRound(userId, roundId).Select(q => new B.Question

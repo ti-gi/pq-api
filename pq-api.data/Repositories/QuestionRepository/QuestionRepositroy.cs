@@ -20,7 +20,8 @@ namespace pq_api.data.Repositories
         #region Question
         public IEnumerable<Question> GetQuestions(string userId)
         {
-            return pqEntities.Questions.Where(q => q.UserId == userId).ToList();
+            return pqEntities.Questions.Include(q => q.QuestionCategories).ThenInclude(c => c.CategoryIdFkNavigation).
+                Where(q => q.UserId == userId).ToList();
         }
 
         public IEnumerable<Question> GetQuestionsForRound(string userId, int roundId)
