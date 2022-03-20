@@ -9,5 +9,6 @@ namespace pq_api.service.BusinessModels
     {
         public string Contestant { get; set; }
         public decimal? Points { get; set; }
+        public decimal? PointsFromLastQuiz { get; set; }
     }
 }

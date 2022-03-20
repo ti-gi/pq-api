@@ -9,5 +9,7 @@ namespace pq_api.Models
     {
         public string Contestant { get; set; }
         public decimal? Points { get; set; }
+
+        public decimal? PointsFromLastQuiz { get; set; }
     }
 }

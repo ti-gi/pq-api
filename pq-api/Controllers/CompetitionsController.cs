@@ -113,7 +113,8 @@ namespace pq_api.Controllers
                 rtn.Add(new M.CompetitionResult
                 {
                     Contestant = r.Contestant,
-                    Points = r.Points
+                    Points = r.Points, 
+                    PointsFromLastQuiz = r.PointsFromLastQuiz
                 });
             }
 

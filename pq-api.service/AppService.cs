@@ -63,7 +63,8 @@ namespace pq_api.service
             IEnumerable<B.CompetitionResult> rtn = competitionRepository.CompetitionResults(CompetitionId).Select(cr => new B.CompetitionResult
             {
                 Contestant = cr.Name,
-                Points = cr.Points
+                Points = cr.Points,
+                PointsFromLastQuiz = cr.PointsFromLastQuiz
             });
 
             return rtn;
