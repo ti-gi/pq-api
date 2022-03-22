@@ -20,6 +20,7 @@ namespace pq_api.data.Entities
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Competition> Competitions { get; set; }
         public virtual DbSet<Contestant> Contestants { get; set; }
+        public virtual DbSet<ContestantWins> ContestantWins { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionCategory> QuestionCategories { get; set; }
         public virtual DbSet<Quiz> Quizzes { get; set; }
@@ -102,6 +103,12 @@ namespace pq_api.data.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Contestants_Competitions");
             });
+
+            modelBuilder.Entity<ContestantWins>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+            });
+
             modelBuilder.Entity<CompetitionResults>(entity =>
             {
                 entity.HasKey(e => e.Name);

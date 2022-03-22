@@ -20,8 +20,4 @@
     <ProjectReference Include="..\pq-api.service\pq-api.service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

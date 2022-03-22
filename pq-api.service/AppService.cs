@@ -201,6 +201,17 @@ namespace pq_api.service
             }
 
         }
+
+        public IEnumerable<B.ContestantWins> GetContestantWins(string userId, int competitionId)
+        {
+            IEnumerable<B.ContestantWins> rtn = contestantRepository.ContestantWins(userId, competitionId).Select(q => new B.ContestantWins
+            {
+                Contestant = q.Name,
+                Wins = q.Wins
+            });
+
+            return rtn;
+        }
         #endregion
 
         #region Quiz

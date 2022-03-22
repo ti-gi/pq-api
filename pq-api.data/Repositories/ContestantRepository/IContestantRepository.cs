@@ -18,6 +18,7 @@ namespace pq_api.data.Repositories
         Contestant Add(Contestant entity);
         Contestant Update(Contestant entity);
         Contestant Delete(string userId, int id);
+        IEnumerable<ContestantWins> ContestantWins(string userId, int competitionId);
 
     }
 }

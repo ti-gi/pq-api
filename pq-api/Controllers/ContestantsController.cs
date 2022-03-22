@@ -121,6 +121,19 @@ namespace pq_api.Controllers
             };
         }
 
+        [Authorize]
+        [HttpGet("competitions/{competitionId}/contestant-wins")]
+        public IEnumerable<M.ContestantWins> GetContestantWins(int competitionId)
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var contestantWins = appService.GetContestantWins(userId, competitionId).Select(q => new M.ContestantWins
+            {
+                contestant = q.Contestant,
+                wins = q.Wins,
+                competitionId = competitionId
+            });
+            return contestantWins;
+        }
 
     }
 }

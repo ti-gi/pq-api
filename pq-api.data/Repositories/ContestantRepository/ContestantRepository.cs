@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using Microsoft.EntityFrameworkCore;
 using pq_api.data.Entities;
 
 namespace pq_api.data.Repositories
@@ -63,6 +64,11 @@ namespace pq_api.data.Repositories
             pqEntities.Contestants.Remove(contestant);
             pqEntities.SaveChanges();
             return contestant;
+        }
+
+        public IEnumerable<ContestantWins> ContestantWins(string userId, int competitionId)
+        {
+            return pqEntities.ContestantWins.FromSqlRaw("Get_ContestantWins @p0", competitionId).ToList();
         }
 
     }

@@ -24,6 +24,7 @@ namespace pq_api.service
         Response<B.Contestant> AddContestant(string userId, B.Contestant contestant);
         Response<B.Contestant> UpdateContestant(string userId, B.Contestant contestant);
         Response<B.Contestant> DeleteContestant(string userId, int id, bool deleteConfirmed);
+        IEnumerable<B.ContestantWins> GetContestantWins(string userId, int competitionId);
         #endregion
 
         #region Quiz
