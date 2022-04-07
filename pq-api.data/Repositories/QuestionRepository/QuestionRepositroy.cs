@@ -35,6 +35,11 @@ namespace pq_api.data.Repositories
             return pqEntities.Questions.Where(q => q.UserId == userId && q.QuestionIdPk == id).First();
         }
 
+        public int GetQuestionCount(string userId)
+        {
+            return pqEntities.Questions.Where(q => q.UserId == userId).Count();
+        }
+
         public Question Add(Question entity)
         {
             pqEntities.Questions.Add(entity);

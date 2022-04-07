@@ -52,6 +52,7 @@ namespace pq_api.service
         IEnumerable<B.Question> GetQuestions(string userId);
         IEnumerable<B.Question> GetQuestionsForRound(string userId, int roundId);
         B.Question GetQuestion(string userId, int questionId);
+        int GetQuestionCount(string userId);
         B.Question AddQuestion(string userId, B.Question question);
         B.Question UpdateQuestion(string userId, B.Question question);
         IEnumerable<B.Category> GetCategories(string userId);

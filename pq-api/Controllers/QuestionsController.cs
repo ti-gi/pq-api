@@ -71,6 +71,15 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
+        [HttpGet("questions/count")]
+        public int GetQuestionCount()
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            int rtn = appService.GetQuestionCount(userId);
+            return rtn;
+        }
+
+        [Authorize]
         [HttpPost("questions/add")]
         public M.Question AddQuestion(M.QuestionCreate q)
         {

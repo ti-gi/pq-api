@@ -14,6 +14,7 @@ namespace pq_api.data.Repositories
         IEnumerable<Question> GetQuestions(string userId);
         IEnumerable<Question> GetQuestionsForRound(string userId, int roundId);
         Question Get(string userId, int id);
+        int GetQuestionCount(string userId);
         Question Add(Question entity);
         Question Update(Question entity);
 

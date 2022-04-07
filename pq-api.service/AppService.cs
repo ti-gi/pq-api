@@ -444,7 +444,6 @@ namespace pq_api.service
 
             return rtn;
         }
-
         public IEnumerable<B.Question> GetQuestionsForRound(string userId, int roundId)
         {
             IEnumerable<B.Question> rtn = questionRepository.GetQuestionsForRound(userId, roundId).Select(q => new B.Question
@@ -478,6 +477,11 @@ namespace pq_api.service
                 Categories = questionCategories,
                 QuestionDifficulty = question.QuestionDifficulty
             };
+            return rtn;
+        }
+        public int GetQuestionCount(string userId)
+        {
+            int rtn = questionRepository.GetQuestionCount(userId);
             return rtn;
         }
         public B.Question AddQuestion(string userId, B.Question question)
