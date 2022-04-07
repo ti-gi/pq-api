@@ -56,7 +56,7 @@ namespace pq_api.service
         B.Question AddQuestion(string userId, B.Question question);
         B.Question UpdateQuestion(string userId, B.Question question);
         IEnumerable<B.Category> GetCategories(string userId);
-        IEnumerable<B.CompetitionCategoryCount> GetCategoriesForCompetition(string userId, int competitionId);
+        IEnumerable<B.CompetitionCategoryCount> GetCategoriesForCompetitionCount(string userId, int competitionId);
         #endregion
     }
 }

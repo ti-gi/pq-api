@@ -139,10 +139,10 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpGet("competitions/{competitionId}/categories")]
-        public IEnumerable<M.CompetitionCategoryCount> GetCategoriesForCompetition(int competitionId)
+        public IEnumerable<M.CompetitionCategoryCount> GetCategoriesForCompetitionCount(int competitionId)
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IEnumerable<M.CompetitionCategoryCount> rtn = appService.GetCategoriesForCompetition(userId, competitionId).Select(q => new M.CompetitionCategoryCount
+            IEnumerable<M.CompetitionCategoryCount> rtn = appService.GetCategoriesForCompetitionCount(userId, competitionId).Select(q => new M.CompetitionCategoryCount
             {
                 competitionId = q.CompetitionId,
                 category = q.Category,

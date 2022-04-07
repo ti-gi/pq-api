@@ -94,25 +94,10 @@ namespace pq_api.data.Repositories
             return pqEntities.Categories.Where(c => c.UserId == userId).ToList();
         }
 
-        public IEnumerable<CompetitionCategoryCount> GetCategoriesForCompetition(string userId, int competitionId)
+        public IEnumerable<CompetitionCategoryCount> GetCategoriesForCompetitionCount(string userId, int competitionId)
         {
-            return pqEntities.CompetitionCategoryCounts.FromSqlRaw("Get_CompetitonCategories @p0", competitionId).ToList();
-            //var rtn = pqEntities.QuestionCategories
-            //                    .Join(pqEntities.Questions,
-            //                            qc => qc.QuestionIdFk,
-            //                            q => q.QuestionIdPk,
-            //                            (qc, q) => new { q.RoundIdFk, Category = qc.CategoryIdFkNavigation.Name })
-            //                    .Join(pqEntities.Rounds,
-            //                            t => t.RoundIdFk,
-            //                            r => r.RoundIdPk,
-            //                            (t, r) => new { r.QuizIdFk, t.Category })
-            //                    .Join(pqEntities.Quizzes,
-            //                            t => t.QuizIdFk,
-            //                            q => q.QuizIdPk,
-            //                            (t, q) => new { q.CompetitionIdFk, t.Category })
-            //                    .Where(t => t.CompetitionIdFk == competitionId)
-            //                    .Select(s => new Tuple<int, string>(s.CompetitionIdFk, s.Category)).ToList();
-            //return rtn;                       
+            return pqEntities.CompetitionCategoryCounts.FromSqlRaw("Get_CategoriesForCompetitionCount @p0, @p1", userId, competitionId).ToList();
+            
                
         }
 

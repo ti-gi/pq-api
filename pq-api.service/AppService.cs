@@ -584,9 +584,9 @@ namespace pq_api.service
 
             return rtn;
         }
-        public IEnumerable<B.CompetitionCategoryCount> GetCategoriesForCompetition(string userId, int competitionId)
+        public IEnumerable<B.CompetitionCategoryCount> GetCategoriesForCompetitionCount(string userId, int competitionId)
         {
-            IEnumerable<B.CompetitionCategoryCount> rtn = questionRepository.GetCategoriesForCompetition(userId, competitionId).Select(c => new B.CompetitionCategoryCount
+            IEnumerable<B.CompetitionCategoryCount> rtn = questionRepository.GetCategoriesForCompetitionCount(userId, competitionId).Select(c => new B.CompetitionCategoryCount
             {
                 CompetitionId = c.CompetitionId,
                 Category = c.Category,
