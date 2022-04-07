@@ -137,5 +137,20 @@ namespace pq_api.Controllers
             return rtn;
         }
 
+        [Authorize]
+        [HttpGet("competitions/{competitionId}/categories")]
+        public IEnumerable<M.CompetitionCategoryCount> GetCategoriesForCompetition(int competitionId)
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.CompetitionCategoryCount> rtn = appService.GetCategoriesForCompetition(userId, competitionId).Select(q => new M.CompetitionCategoryCount
+            {
+                competitionId = q.CompetitionId,
+                category = q.Category,
+                count = q.Count
+            });
+
+            return rtn;
+        }
+
     }
 }

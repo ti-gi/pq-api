@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\pq-api.data\pq-api.data.csproj" />
   </ItemGroup>
 

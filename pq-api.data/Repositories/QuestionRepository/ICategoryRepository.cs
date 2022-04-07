@@ -12,6 +12,7 @@ namespace pq_api.data.Repositories
     public interface ICategoryRepository
     {
         IEnumerable<Category> GetCategories(string userId);
+        IEnumerable<CompetitionCategoryCount> GetCategoriesForCompetition(string userId, int competitionId);
         Category Add(Category entity);
         
     }

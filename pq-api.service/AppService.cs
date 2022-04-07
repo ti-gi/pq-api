@@ -580,6 +580,17 @@ namespace pq_api.service
 
             return rtn;
         }
+        public IEnumerable<B.CompetitionCategoryCount> GetCategoriesForCompetition(string userId, int competitionId)
+        {
+            IEnumerable<B.CompetitionCategoryCount> rtn = questionRepository.GetCategoriesForCompetition(userId, competitionId).Select(c => new B.CompetitionCategoryCount
+            {
+                CompetitionId = c.CompetitionId,
+                Category = c.Category,
+                Count = c.Count
+            });
+
+            return rtn;
+        }
         #endregion
     }
 }

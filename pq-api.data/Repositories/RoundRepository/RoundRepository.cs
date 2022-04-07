@@ -17,7 +17,7 @@ namespace pq_api.data.Repositories
 
         public IEnumerable<Round> All(string userId)
         {
-            return pqEntities.Rounds.ToList();
+            return pqEntities.Rounds.Where(r => r.UserId == userId).ToList();
         }
 
         public IEnumerable<Round> GetRoundsForQuiz(string userId, int QuizId)
