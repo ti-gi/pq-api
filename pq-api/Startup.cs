@@ -77,11 +77,13 @@ namespace pq_api
 
             services.AddControllers();
             services.AddTransient<IAppService, AppService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<ICompetitionRepository, CompetitionRepository>();
             services.AddTransient<IContestantRepository, ContestantRepository>();
             services.AddTransient<IQuizRepository, QuizRepository>();
             services.AddTransient<IRoundRepository, RoundRepository>();
             services.AddTransient<IQuestionRepository, QuestionRepositroy>();
+            services.AddTransient<IStatisticsRepository, StatisticsRepository>();
 
             services.AddSwaggerGen(c =>
             {

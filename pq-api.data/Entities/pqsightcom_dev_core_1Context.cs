@@ -20,6 +20,7 @@ namespace pq_api.data.Entities
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Competition> Competitions { get; set; }
         public virtual DbSet<CompetitionCategoryCount> CompetitionCategoryCounts { get; set; }
+        public virtual DbSet<CategoryCount> CategoryCounts { get; set; }
         public virtual DbSet<Contestant> Contestants { get; set; }
         public virtual DbSet<ContestantWins> ContestantWins { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
@@ -81,6 +82,11 @@ namespace pq_api.data.Entities
             });
 
             modelBuilder.Entity<CompetitionCategoryCount>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CategoryCount>(entity =>
             {
                 entity.HasNoKey();
             });
