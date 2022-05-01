@@ -29,12 +29,26 @@ namespace pq_api.Controllers
 
         [Authorize]
         [HttpGet("statistics/categories")]
-        public IEnumerable<M.CategoryCount> GetCategoriesCount(int competitionId)
+        public IEnumerable<M.CategoryCount> GetCategoriesCount()
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             IEnumerable<M.CategoryCount> rtn = statisticsService.GetCategoriesCount(userId).Select(q => new M.CategoryCount
             {
                 category = q.Category,
+                count = q.Count
+            });
+
+            return rtn;
+        }
+
+        [Authorize]
+        [HttpGet("statistics/difficulty")]
+        public IEnumerable<M.DifficultyCount> GetDifficultyCount()
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<M.DifficultyCount> rtn = statisticsService.GetDifficultyCount(userId).Select(q => new M.DifficultyCount
+            {
+                difficulty = q.Difficulty,
                 count = q.Count
             });
 

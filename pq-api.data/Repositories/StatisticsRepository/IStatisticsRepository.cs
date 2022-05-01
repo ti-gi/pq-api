@@ -10,5 +10,7 @@ namespace pq_api.data.Repositories
     public interface IStatisticsRepository
     {
         IEnumerable<CategoryCount> GetCategoriesCount(string userId);
+
+        IEnumerable<DifficultyCount> GetDifficultyCount(string userId);
     }
 }

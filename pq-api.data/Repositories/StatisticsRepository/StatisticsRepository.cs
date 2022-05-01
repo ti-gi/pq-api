@@ -19,5 +19,18 @@ namespace pq_api.data.Repositories
         {
             return pqEntities.CategoryCounts.FromSqlRaw("Get_CategoriesCount @p0", userId).ToList();
         }
+
+        public IEnumerable<DifficultyCount> GetDifficultyCount(string userId)
+        {
+            var rtn = pqEntities.Questions.Where(q => q.UserId == userId)
+                                .GroupBy(q => q.QuestionDifficulty)
+                                .Select(group => new DifficultyCount
+                                {
+                                    Difficulty = group.Key,
+                                    Count = group.Count()
+                                }).ToList();
+
+            return rtn;
+        }
     }
 }

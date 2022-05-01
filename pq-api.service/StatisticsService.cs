@@ -30,5 +30,16 @@ namespace pq_api.service
 
             return rtn;
         }
+
+        public IEnumerable<DifficultyCount> GetDifficultyCount(string userId)
+        {
+            IEnumerable<B.DifficultyCount> rtn = statisticsRepository.GetDifficultyCount(userId).Select(c => new B.DifficultyCount
+            {
+                Difficulty = c.Difficulty,
+                Count = c.Count
+            });
+
+            return rtn;
+        }
     }
 }

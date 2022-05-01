@@ -11,5 +11,7 @@ namespace pq_api.service
     public interface IStatisticsService
     {
         IEnumerable<B.CategoryCount> GetCategoriesCount(string userId);
+
+        IEnumerable<B.DifficultyCount> GetDifficultyCount(string userId);
     }
 }
