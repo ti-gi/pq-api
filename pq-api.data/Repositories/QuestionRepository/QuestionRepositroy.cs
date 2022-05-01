@@ -20,14 +20,20 @@ namespace pq_api.data.Repositories
         #region Question
         public IEnumerable<Question> GetQuestions(string userId)
         {
-            return pqEntities.Questions.Include(q => q.QuestionCategories).ThenInclude(c => c.CategoryIdFkNavigation).
-                Where(q => q.UserId == userId).ToList();
+            return pqEntities.Questions.Include(q => q.QuestionCategories)
+                                    .ThenInclude(c => c.CategoryIdFkNavigation)
+                                    .Where(q => q.UserId == userId)
+                                    .OrderBy(q => q.RoundIdFk)
+                                    .ThenBy(q => q.QuestionIdPk).ToList();
         }
 
         public IEnumerable<Question> GetQuestionsForRound(string userId, int roundId)
         {
-            return pqEntities.Questions.Include(q => q.QuestionCategories).ThenInclude(c => c.CategoryIdFkNavigation).
-                Where(q => q.UserId == userId && q.RoundIdFk == roundId).ToList();
+            return pqEntities.Questions.Include(q => q.QuestionCategories)
+                                    .ThenInclude(c => c.CategoryIdFkNavigation)
+                                    .Where(q => q.UserId == userId && q.RoundIdFk == roundId)
+                                    .OrderBy(q => q.RoundIdFk)
+                                    .ThenBy(q => q.QuestionIdPk).ToList();
         }
 
         public Question Get(string userId, int id)
@@ -49,12 +55,16 @@ namespace pq_api.data.Repositories
 
         public Question Update(Question entity)
         {
-            var existingQuestion = pqEntities.Questions.Where(q => q.UserId == entity.UserId && q.QuestionIdPk == entity.QuestionIdPk).FirstOrDefault();
+            var existingQuestion = pqEntities.Questions
+                                            .Include(q => q.QuestionCategories)
+                                            .ThenInclude(c => c.CategoryIdFkNavigation)
+                                            .Where(q => q.UserId == entity.UserId && q.QuestionIdPk == entity.QuestionIdPk).FirstOrDefault();
             if (existingQuestion != null)
             {
                 existingQuestion.Question1 = entity.Question1;
                 existingQuestion.Answer = entity.Answer;
                 existingQuestion.QuestionDifficulty = entity.QuestionDifficulty;
+                existingQuestion.RoundIdFk = entity.RoundIdFk;
             }
             pqEntities.SaveChanges();
             return existingQuestion;
@@ -96,9 +106,7 @@ namespace pq_api.data.Repositories
 
         public IEnumerable<CompetitionCategoryCount> GetCategoriesForCompetitionCount(string userId, int competitionId)
         {
-            return pqEntities.CompetitionCategoryCounts.FromSqlRaw("Get_CategoriesForCompetitionCount @p0, @p1", userId, competitionId).ToList();
-            
-               
+            return pqEntities.CompetitionCategoryCounts.FromSqlRaw("Get_CategoriesForCompetitionCount @p0, @p1", userId, competitionId).ToList();  
         }
 
         public Category Add(Category entity)

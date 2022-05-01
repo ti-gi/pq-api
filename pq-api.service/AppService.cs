@@ -523,16 +523,7 @@ namespace pq_api.service
         }
         public B.Question UpdateQuestion(string userId, B.Question question)
         {
-            var updatedQuestion = questionRepository.Update(new E.Question
-            {
-                QuestionIdPk = question.Id,
-                Question1 = question.Question1,
-                Answer = question.Answer,
-                RoundIdFk = question.RoundId,
-                QuestionDifficulty = question.QuestionDifficulty,
-                UserId = userId
-            });
-
+            
             List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
             List<B.Category> nonExistantCategories = new List<B.Category>();
             foreach (var item in question.Categories.Where(q => q.Id == 0))//non existant categories - add them
@@ -547,7 +538,7 @@ namespace pq_api.service
             {
                 if (existingQuestionCategories.Where(eqc => eqc.CategoryIdFk == item.Id).Count() == 0)
                 {
-                    var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = updatedQuestion.QuestionIdPk, CategoryIdFk = item.Id, UserId = userId });
+                    var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = question.Id, CategoryIdFk = item.Id, UserId = userId });
                 }
 
             }
@@ -562,15 +553,27 @@ namespace pq_api.service
 
             foreach (var item in nonExistantCategories)
             {
-                var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = updatedQuestion.QuestionIdPk, CategoryIdFk = item.Id, UserId = userId });
+                var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = question.Id, CategoryIdFk = item.Id, UserId = userId });
             }
+
+            var updatedQuestion = questionRepository.Update(new E.Question
+            {
+                QuestionIdPk = question.Id,
+                Question1 = question.Question1,
+                Answer = question.Answer,
+                RoundIdFk = question.RoundId,
+                QuestionDifficulty = question.QuestionDifficulty,
+                UserId = userId
+            });
 
             B.Question rtn = new B.Question
             {
                 Id = updatedQuestion.QuestionIdPk,
                 RoundId = updatedQuestion.RoundIdFk,
                 Question1 = updatedQuestion.Question1,
-                Answer = updatedQuestion.Answer
+                Answer = updatedQuestion.Answer,
+                QuestionDifficulty = updatedQuestion.QuestionDifficulty,
+                Categories = updatedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList()
             };
             return rtn;
         }

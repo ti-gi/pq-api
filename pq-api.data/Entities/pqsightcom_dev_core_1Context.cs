@@ -157,7 +157,6 @@ namespace pq_api.data.Entities
                 entity.HasOne(d => d.RoundIdFkNavigation)
                     .WithMany(p => p.Questions)
                     .HasForeignKey(d => d.RoundIdFk)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Questions_Rounds");
             });
 

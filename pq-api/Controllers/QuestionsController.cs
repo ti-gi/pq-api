@@ -38,8 +38,8 @@ namespace pq_api.Controllers
                 roundId = q.RoundId,
                 question = q.Question1,
                 answer = q.Answer,
-                Categories = q.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
-                QuestionDifficulty = q.QuestionDifficulty
+                categories = q.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                questionDifficulty = q.QuestionDifficulty
             });
 
             return rtn;
@@ -64,8 +64,8 @@ namespace pq_api.Controllers
                 roundId = question.RoundId,
                 question = question.Question1,
                 answer = question.Answer,
-                Categories = questionCategories,
-                QuestionDifficulty = question.QuestionDifficulty
+                categories = questionCategories,
+                questionDifficulty = question.QuestionDifficulty
             };
 
         }
@@ -97,8 +97,6 @@ namespace pq_api.Controllers
                 question = addedQuestion.Question1,
                 answer = addedQuestion.Answer
             };
-
-
         }
 
         [Authorize]
@@ -126,7 +124,10 @@ namespace pq_api.Controllers
             {
                 id = updatedQuestion.Id,
                 question = updatedQuestion.Question1,
-                answer = updatedQuestion.Answer
+                answer = updatedQuestion.Answer,
+                categories = updatedQuestion.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                roundId = updatedQuestion.RoundId,
+                questionDifficulty = updatedQuestion.QuestionDifficulty
             };
 
         }

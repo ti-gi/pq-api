@@ -15,7 +15,7 @@ namespace pq_api.data.Entities
         public int QuestionIdPk { get; set; }
         public string Question1 { get; set; }
         public string Answer { get; set; }
-        public int RoundIdFk { get; set; }
+        public int? RoundIdFk { get; set; }
         public int QuestionDifficulty { get; set; }
         public string UserId { get; set; }
 
