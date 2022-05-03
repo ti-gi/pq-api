@@ -95,7 +95,10 @@ namespace pq_api.Controllers
             {
                 id = addedQuestion.Id,
                 question = addedQuestion.Question1,
-                answer = addedQuestion.Answer
+                answer = addedQuestion.Answer,
+                categories = addedQuestion.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                roundId = addedQuestion.RoundId,
+                questionDifficulty = addedQuestion.QuestionDifficulty
             };
         }
 

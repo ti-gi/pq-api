@@ -38,7 +38,10 @@ namespace pq_api.data.Repositories
 
         public Question Get(string userId, int id)
         {
-            return pqEntities.Questions.Where(q => q.UserId == userId && q.QuestionIdPk == id).First();
+            return pqEntities.Questions
+                            .Include(q => q.QuestionCategories)
+                            .ThenInclude(c => c.CategoryIdFkNavigation)
+                            .Where(q => q.UserId == userId && q.QuestionIdPk == id).FirstOrDefault();
         }
 
         public int GetQuestionCount(string userId)
@@ -50,7 +53,11 @@ namespace pq_api.data.Repositories
         {
             pqEntities.Questions.Add(entity);
             pqEntities.SaveChanges();
-            return entity;
+            var newQuestion = pqEntities.Questions
+                                           .Include(q => q.QuestionCategories)
+                                           .ThenInclude(c => c.CategoryIdFkNavigation)
+                                           .Where(q => q.UserId == entity.UserId && q.QuestionIdPk == entity.QuestionIdPk).FirstOrDefault();
+            return newQuestion;
         }
 
         public Question Update(Question entity)

@@ -7,7 +7,7 @@ namespace pq_api.Models
 {
     public class QuestionCreate
     {
-        public int RoundId { get; set; }
+        public int? RoundId { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
         public List<Category> Categories { get; set; }

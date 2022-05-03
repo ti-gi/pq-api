@@ -511,13 +511,17 @@ namespace pq_api.service
             {
                 var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = addedQuestion.QuestionIdPk, CategoryIdFk = item.Id, UserId = userId });
             }
+
+            addedQuestion = questionRepository.Get(userId, addedQuestion.QuestionIdPk);
+
             B.Question rtn = new B.Question
             {
                 Id = addedQuestion.QuestionIdPk,
                 RoundId = addedQuestion.RoundIdFk,
                 Question1 = addedQuestion.Question1,
                 Answer = addedQuestion.Answer,
-                QuestionDifficulty = addedQuestion.QuestionDifficulty
+                QuestionDifficulty = addedQuestion.QuestionDifficulty,
+                Categories = addedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList()
             };
             return rtn;
         }
