@@ -596,6 +596,7 @@ namespace pq_api.service
             IEnumerable<B.CompetitionCategoryCount> rtn = questionRepository.GetCategoriesForCompetitionCount(userId, competitionId).Select(c => new B.CompetitionCategoryCount
             {
                 CompetitionId = c.CompetitionId,
+                QuizId = c.QuizId,
                 Category = c.Category,
                 Count = c.Count
             });

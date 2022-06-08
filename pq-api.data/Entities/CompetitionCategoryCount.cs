@@ -9,6 +9,7 @@ namespace pq_api.data.Entities
     public partial class CompetitionCategoryCount
     {
         public int CompetitionId { get; set; }
+        public int QuizId { get; set; }
         public string Category { get; set; }
         public int Count { get; set; }
 

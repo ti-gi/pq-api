@@ -145,6 +145,7 @@ namespace pq_api.Controllers
             IEnumerable<M.CompetitionCategoryCount> rtn = appService.GetCategoriesForCompetitionCount(userId, competitionId).Select(q => new M.CompetitionCategoryCount
             {
                 competitionId = q.CompetitionId,
+                quizId = q.QuizId,
                 category = q.Category,
                 count = q.Count
             });
