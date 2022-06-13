@@ -37,7 +37,6 @@ namespace pq_api.service
         IEnumerable<B.QuizResult> AddQuizResults(string userId, IEnumerable<B.QuizResult> QuizResults);
         IEnumerable<B.QuizResult> UpdateQuizResults(string userId, IEnumerable<B.QuizResult> QuizResults);
         B.QuizResult DeleteQuizResult(string userId, int id);
-        IEnumerable<B.QuizResultFinal> GetQuizResultsFinal(string userId, int QuizId);
         #endregion
 
         #region Round

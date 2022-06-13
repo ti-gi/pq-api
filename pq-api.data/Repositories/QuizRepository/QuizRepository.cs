@@ -100,12 +100,6 @@ namespace pq_api.data.Repositories
             return quizResult;
         }
 
-
-        public IEnumerable<QuizResultFinal> QuizResultsFinal(int QuizId)
-        {
-            return pqEntities.QuizResultFinal.FromSqlRaw("Get_QuizResults @p0", QuizId).ToList();
-        }
-
         #endregion
 
     }

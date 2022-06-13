@@ -371,17 +371,7 @@ namespace pq_api.service
                 PointsAfterRound4 = res.PointsAfterRound4
             };
         }
-        public IEnumerable<B.QuizResultFinal> GetQuizResultsFinal(string userId, int QuizId)
-        {
-
-            IEnumerable<B.QuizResultFinal> rtn = quizRepository.QuizResultsFinal(QuizId).Select(cr => new B.QuizResultFinal
-            {
-                Contestant = cr.Name,
-                Points = cr.Points
-            });
-
-            return rtn;
-        }
+       
         #endregion Quiz
 
         #region Rounds

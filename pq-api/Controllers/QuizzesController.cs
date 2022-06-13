@@ -105,26 +105,6 @@ namespace pq_api.Controllers
         }
 
         [Authorize]
-        [HttpGet("quizzes/{QuizId}/quiz-results-final")]
-        public IEnumerable<M.QuizResultFinal>GetQuizResultsFinal(int QuizId)
-        {
-            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var results = appService.GetQuizResultsFinal(userId, QuizId);
-            var rtn = new List<M.QuizResultFinal>();
-
-            foreach (var r in results)
-            {
-                rtn.Add(new M.QuizResultFinal
-                {
-                    Contestant = r.Contestant,
-                    Points = r.Points
-                });
-            }
-
-            return rtn;
-        }
-
-        [Authorize]
         [HttpGet("quizzes/{QuizId}/quiz-results")]
         public IEnumerable<M.QuizResult> GetQuizResults(int QuizId)
         {
@@ -159,7 +139,7 @@ namespace pq_api.Controllers
                 });
             }
 
-            return rtn;
+            return rtn.OrderByDescending(r => r.PointsAfterRound4 ?? r.PointsAfterRound3 ?? r.PointsAfterRound2 ?? r.PointsAfterRound1);
         }
 
         [Authorize]
