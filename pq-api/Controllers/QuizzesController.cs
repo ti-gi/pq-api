@@ -181,6 +181,7 @@ namespace pq_api.Controllers
                     Id = r.Id,
                     QuizId = r.QuizId,
                     ContestantId = r.ContestantId,
+                    Contestant = r.Contestant,
 
                     Round1Points = r.Round1Points,
                     PointsAfterRound1 = r.PointsAfterRound1,
@@ -241,6 +242,7 @@ namespace pq_api.Controllers
                     Id = r.Id,
                     QuizId = r.QuizId,
                     ContestantId = r.ContestantId,
+                    Contestant = r.Contestant,
 
                     Round1Points = r.Round1Points,
                     PointsAfterRound1 = r.PointsAfterRound1,

@@ -73,7 +73,7 @@ namespace pq_api.data.Repositories
 
         public QuizResult UpdateQuizResult(QuizResult entity)
         {
-            var existingQuizResult = pqEntities.QuizResults.Where(q => q.QuizResultIdPk == entity.QuizResultIdPk).FirstOrDefault();
+            var existingQuizResult = pqEntities.QuizResults.Include(q => q.ContestantIdFkNavigation).Where(q => q.QuizResultIdPk == entity.QuizResultIdPk).FirstOrDefault();
             if (existingQuizResult != null)
             {
                 existingQuizResult.Round1Points = entity.Round1Points;

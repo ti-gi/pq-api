@@ -308,6 +308,9 @@ namespace pq_api.service
                 rtn.Add(new B.QuizResult
                 {
                     Id = res.QuizResultIdPk,
+                    QuizId = res.QuizIdFk,
+                    ContestantId = res.ContestantIdFk,
+                    Contestant = res.ContestantIdFkNavigation.Name,
                     Round1Points = res.Round1Points,
                     Round2Points = res.Round2Points,
                     Round3Points = res.Round3Points,
@@ -343,6 +346,9 @@ namespace pq_api.service
                 rtn.Add(new B.QuizResult
                 {
                     Id = res.QuizResultIdPk,
+                    QuizId = res.QuizIdFk,
+                    ContestantId = res.ContestantIdFk,
+                    Contestant = res.ContestantIdFkNavigation.Name,
                     Round1Points = res.Round1Points,
                     Round2Points = res.Round2Points,
                     Round3Points = res.Round3Points,
