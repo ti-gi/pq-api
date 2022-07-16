@@ -13,5 +13,6 @@ namespace pq_api.Models
         public string answer { get; set; }
         public List<Category> categories { get; set; }
         public int questionDifficulty { get; set; }
+        public int? ord { get; set; }
     }
 }

@@ -13,5 +13,6 @@ namespace pq_api.service.BusinessModels
         public string Answer { get; set; }
         public List<Category> Categories { get; set; }
         public int QuestionDifficulty { get; set; }
+        public int? Ord { get; set; }
     }
 }

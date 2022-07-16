@@ -36,6 +36,12 @@ namespace pq_api.data.Repositories
                                     .ThenBy(q => q.QuestionIdPk).ToList();
         }
 
+        public int GetNextOrd(string userId, int roundId)
+        {
+            int lastOrd = pqEntities.Questions.Where(q => q.UserId == userId && q.RoundIdFk == roundId).Count();
+            return lastOrd + 1;
+        }
+
         public Question Get(string userId, int id)
         {
             return pqEntities.Questions
@@ -72,9 +78,33 @@ namespace pq_api.data.Repositories
                 existingQuestion.Answer = entity.Answer;
                 existingQuestion.QuestionDifficulty = entity.QuestionDifficulty;
                 existingQuestion.RoundIdFk = entity.RoundIdFk;
+                existingQuestion.Ord = entity.Ord;
             }
             pqEntities.SaveChanges();
             return existingQuestion;
+        }
+
+        public Question UpdateOrd(string userId, int id, int? ord)
+        {
+            var existingQuestion = pqEntities.Questions
+                                            .Include(q => q.QuestionCategories)
+                                            .ThenInclude(c => c.CategoryIdFkNavigation)
+                                            .Where(q => q.UserId == userId && q.QuestionIdPk == id).FirstOrDefault();
+            if (existingQuestion != null)
+            {
+                existingQuestion.Ord = ord;
+            }
+            pqEntities.SaveChanges();
+            return existingQuestion;
+        }
+
+        public Question Delete(string userId, int id)
+        {
+            var question = pqEntities.Questions.Where(r => r.UserId == userId && r.QuestionIdPk == id).First();
+            // TODO - delete categories first
+            pqEntities.Questions.Remove(question);
+            pqEntities.SaveChanges();
+            return question;
         }
         #endregion
 
@@ -91,7 +121,7 @@ namespace pq_api.data.Repositories
             return entity;
         }
 
-        public QuestionCategory Delete(string userId, int QuestionCategoryId)
+        public QuestionCategory DeleteQuestionCategory(string userId, int QuestionCategoryId)
         {
             var questionCategory = pqEntities.QuestionCategories.Where(qc => qc.UserId == userId && qc.QuestionCategoryIdPk == QuestionCategoryId).First();
             pqEntities.QuestionCategories.Remove(questionCategory);

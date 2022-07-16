@@ -18,6 +18,7 @@ namespace pq_api.data.Entities
         public int? RoundIdFk { get; set; }
         public int QuestionDifficulty { get; set; }
         public string UserId { get; set; }
+        public int? Ord { get; set; }
 
         public virtual Round RoundIdFkNavigation { get; set; }
         public virtual ICollection<QuestionCategory> QuestionCategories { get; set; }

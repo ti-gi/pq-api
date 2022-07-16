@@ -39,7 +39,8 @@ namespace pq_api.Controllers
                 question = q.Question1,
                 answer = q.Answer,
                 categories = q.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
-                questionDifficulty = q.QuestionDifficulty
+                questionDifficulty = q.QuestionDifficulty,
+                ord = q.Ord
             });
 
             return rtn;
@@ -65,7 +66,8 @@ namespace pq_api.Controllers
                 question = question.Question1,
                 answer = question.Answer,
                 categories = questionCategories,
-                questionDifficulty = question.QuestionDifficulty
+                questionDifficulty = question.QuestionDifficulty,
+                ord = question.Ord
             };
 
         }
@@ -98,7 +100,8 @@ namespace pq_api.Controllers
                 answer = addedQuestion.Answer,
                 categories = addedQuestion.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
                 roundId = addedQuestion.RoundId,
-                questionDifficulty = addedQuestion.QuestionDifficulty
+                questionDifficulty = addedQuestion.QuestionDifficulty,
+                ord = addedQuestion.Ord
             };
         }
 
@@ -130,9 +133,30 @@ namespace pq_api.Controllers
                 answer = updatedQuestion.Answer,
                 categories = updatedQuestion.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
                 roundId = updatedQuestion.RoundId,
-                questionDifficulty = updatedQuestion.QuestionDifficulty
+                questionDifficulty = updatedQuestion.QuestionDifficulty,
+                ord = updatedQuestion.Ord
             };
+        }
 
+        [Authorize]
+        [HttpPost("questions/update-ord")]
+        public M.Question UpdateQuestionOrd(M.QuestionUpdateOrd q)
+        //public M.Question UpdateQuestionOrd(int id, int ord)
+        
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var updatedQuestion = appService.UpdateQuestionOrd(userId, q.Id, q.Ord);
+
+            return new M.Question
+            {
+                id = updatedQuestion.Id,
+                question = updatedQuestion.Question1,
+                answer = updatedQuestion.Answer,
+                categories = updatedQuestion.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                roundId = updatedQuestion.RoundId,
+                questionDifficulty = updatedQuestion.QuestionDifficulty,
+                ord = updatedQuestion.Ord
+            };
         }
 
         [Authorize]

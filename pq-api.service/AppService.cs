@@ -434,7 +434,8 @@ namespace pq_api.service
                 Question1 = q.Question1,
                 Answer = q.Answer,
                 Categories = q.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
-                QuestionDifficulty = q.QuestionDifficulty
+                QuestionDifficulty = q.QuestionDifficulty,
+                Ord = q.Ord
 
             });
 
@@ -449,7 +450,8 @@ namespace pq_api.service
                 Question1 = q.Question1,
                 Answer = q.Answer,
                 Categories = q.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
-                QuestionDifficulty = q.QuestionDifficulty
+                QuestionDifficulty = q.QuestionDifficulty,
+                Ord = q.Ord
 
             });
 
@@ -471,7 +473,8 @@ namespace pq_api.service
                 Question1 = question.Question1,
                 Answer = question.Answer,
                 Categories = questionCategories,
-                QuestionDifficulty = question.QuestionDifficulty
+                QuestionDifficulty = question.QuestionDifficulty,
+                Ord = question.Ord
             };
             return rtn;
         }
@@ -482,12 +485,18 @@ namespace pq_api.service
         }
         public B.Question AddQuestion(string userId, B.Question question)
         {
+            int? ord = null;
+            if(question.RoundId != null)
+            {
+                ord = questionRepository.GetNextOrd(userId, (int)question.RoundId);
+            }
             var addedQuestion = questionRepository.Add(new E.Question { 
                 Question1 = question.Question1, 
                 Answer = question.Answer, 
                 RoundIdFk = question.RoundId, 
                 QuestionDifficulty = question.QuestionDifficulty, 
-                UserId = userId 
+                UserId = userId,
+                Ord = ord
             });
 
             List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
@@ -517,13 +526,14 @@ namespace pq_api.service
                 Question1 = addedQuestion.Question1,
                 Answer = addedQuestion.Answer,
                 QuestionDifficulty = addedQuestion.QuestionDifficulty,
-                Categories = addedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList()
+                Categories = addedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
+                Ord = addedQuestion.Ord
             };
             return rtn;
         }
         public B.Question UpdateQuestion(string userId, B.Question question)
         {
-            
+            #region Add/Delete categories for question
             List<B.QuestionCategory> qc = new List<B.QuestionCategory>();
             List<B.Category> nonExistantCategories = new List<B.Category>();
             foreach (var item in question.Categories.Where(q => q.Id == 0))//non existant categories - add them
@@ -547,13 +557,41 @@ namespace pq_api.service
             {
                 if (question.Categories.Where(c => c.Id == item.CategoryIdFk).Count() == 0)
                 {
-                    questionRepository.Delete(userId, item.QuestionCategoryIdPk);
+                    questionRepository.DeleteQuestionCategory(userId, item.QuestionCategoryIdPk);
                 }
             }
 
             foreach (var item in nonExistantCategories)
             {
                 var qc1 = questionRepository.Add(new E.QuestionCategory { QuestionIdFk = question.Id, CategoryIdFk = item.Id, UserId = userId });
+            }
+
+            #endregion
+
+            var questionFromDatabase = questionRepository.Get(userId, question.Id);
+            int? ord = questionFromDatabase.Ord;
+            int? previousOrd = ord;
+            int? previousRound = questionFromDatabase.RoundIdFk;
+
+            // if roundId is being updated, put the question at the end of the round
+            if (previousRound != question.RoundId)
+            {
+                if (question.RoundId != null)
+                {
+                    ord = questionRepository.GetNextOrd(userId, (int)question.RoundId);
+
+                    // to each question from the previous round with order greater then the previous one reduce ord by 1 
+                    if (previousRound != null)
+                    {
+                        var questionsWithGreaterOrd = questionRepository.GetQuestionsForRound(userId, (int)previousRound).Where(q => q.Ord > previousOrd);
+                        foreach (var item in questionsWithGreaterOrd)
+                        {
+
+                            questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                            questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord - 1);
+                        }
+                    }
+                }
             }
 
             var updatedQuestion = questionRepository.Update(new E.Question
@@ -563,8 +601,10 @@ namespace pq_api.service
                 Answer = question.Answer,
                 RoundIdFk = question.RoundId,
                 QuestionDifficulty = question.QuestionDifficulty,
+                Ord = ord,
                 UserId = userId
             });
+
 
             B.Question rtn = new B.Question
             {
@@ -573,9 +613,79 @@ namespace pq_api.service
                 Question1 = updatedQuestion.Question1,
                 Answer = updatedQuestion.Answer,
                 QuestionDifficulty = updatedQuestion.QuestionDifficulty,
-                Categories = updatedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList()
+                Categories = updatedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
+                Ord = updatedQuestion.Ord
             };
             return rtn;
+        }
+        public B.Question UpdateQuestionOrd(string userId, int id, int ord)
+        {
+            var questionFromDatabase = questionRepository.Get(userId, id);
+            int? previousOrd = questionFromDatabase.Ord;
+            int? roundId = questionFromDatabase.RoundIdFk;
+            //reorder questions between previosOrd and ord
+            if (previousOrd != null)
+            {
+                if (ord > previousOrd)
+                {
+                    var questionsBetween = questionRepository.GetQuestionsForRound(userId, (int)roundId).Where(q => q.Ord > previousOrd && q.Ord <= ord);
+                    foreach (var item in questionsBetween)
+                    {
+                        questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                        questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord - 1);
+                    }
+                }
+                else if (ord < previousOrd)
+                {
+                    var questionsBetween = questionRepository.GetQuestionsForRound(userId, (int)roundId).Where(q => q.Ord < previousOrd && q.Ord >= ord);
+                    foreach (var item in questionsBetween)
+                    {
+                        questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                        questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord + 1);
+                    }
+                }
+            }
+
+            var updatedQuestion = questionRepository.UpdateOrd(userId, id, ord);
+
+            B.Question rtn = new B.Question
+            {
+                Id = updatedQuestion.QuestionIdPk,
+                RoundId = updatedQuestion.RoundIdFk,
+                Question1 = updatedQuestion.Question1,
+                Answer = updatedQuestion.Answer,
+                QuestionDifficulty = updatedQuestion.QuestionDifficulty,
+                Categories = updatedQuestion.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
+                Ord = updatedQuestion.Ord
+            };
+            return rtn;
+        }
+        public B.Question DeleteQuestion(string userId, int id)
+        {
+            var res = questionRepository.Delete(userId, id);
+            int? ord = res.Ord;
+            int? roundId = res.RoundIdFk;
+            //reorder questions with ord greater then deleted question
+            if (roundId != null)
+            {
+                var questionsWithGreaterOrd = questionRepository.GetQuestionsForRound(userId, (int)roundId).Where(q => q.Ord > ord);
+                foreach (var item in questionsWithGreaterOrd)
+                {
+                    var questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                    questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord - 1);
+                }
+            }
+
+            return new B.Question
+            {
+                Id = res.QuestionIdPk,
+                RoundId = res.RoundIdFk,
+                Question1 = res.Question1,
+                Answer = res.Answer,
+                QuestionDifficulty = res.QuestionDifficulty,
+                Categories = res.QuestionCategories.Select(c => new B.Category { Id = c.CategoryIdFkNavigation.CategoryIdPk, Name = c.CategoryIdFkNavigation.Name }).ToList(),
+                Ord = res.Ord
+            };
         }
         public IEnumerable<B.Category> GetCategories(string userId)
         {

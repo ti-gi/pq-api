@@ -15,7 +15,7 @@ namespace pq_api.data.Repositories
         IEnumerable<QuestionCategory> GetQuestionCategories(string userId, int id);
         IEnumerable<QuestionCategory> GetCategoriesForQuestion(string userId, int QuestionId);
         QuestionCategory Add(QuestionCategory entity);
-        QuestionCategory Delete(string userId, int QuestionCategoryId);        
+        QuestionCategory DeleteQuestionCategory(string userId, int QuestionCategoryId);        
 
     }
 }

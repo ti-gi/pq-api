@@ -101,7 +101,8 @@ namespace pq_api.Controllers
                 question = q.Question1,
                 answer = q.Answer,
                 categories = q.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
-                questionDifficulty = q.QuestionDifficulty
+                questionDifficulty = q.QuestionDifficulty,
+                ord = q.Ord
             });
 
             return rtn;
