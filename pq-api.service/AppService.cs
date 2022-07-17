@@ -631,8 +631,8 @@ namespace pq_api.service
                     var questionsBetween = questionRepository.GetQuestionsForRound(userId, (int)roundId).Where(q => q.Ord > previousOrd && q.Ord <= ord);
                     foreach (var item in questionsBetween)
                     {
-                        questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
-                        questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord - 1);
+                        //questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                        questionRepository.UpdateOrd(userId, item.QuestionIdPk, item.Ord - 1);
                     }
                 }
                 else if (ord < previousOrd)
@@ -640,8 +640,8 @@ namespace pq_api.service
                     var questionsBetween = questionRepository.GetQuestionsForRound(userId, (int)roundId).Where(q => q.Ord < previousOrd && q.Ord >= ord);
                     foreach (var item in questionsBetween)
                     {
-                        questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
-                        questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord + 1);
+                        //questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                        questionRepository.UpdateOrd(userId, item.QuestionIdPk, item.Ord + 1);
                     }
                 }
             }
