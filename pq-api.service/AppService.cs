@@ -671,8 +671,8 @@ namespace pq_api.service
                 var questionsWithGreaterOrd = questionRepository.GetQuestionsForRound(userId, (int)roundId).Where(q => q.Ord > ord);
                 foreach (var item in questionsWithGreaterOrd)
                 {
-                    var questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
-                    questionRepository.UpdateOrd(userId, questionFromDatabase.QuestionIdPk, questionFromDatabase.Ord - 1);
+                    //var questionFromDatabase = questionRepository.Get(userId, item.QuestionIdPk);// NOT NEEDED?
+                    questionRepository.UpdateOrd(userId, item.QuestionIdPk, item.Ord - 1);
                 }
             }
 

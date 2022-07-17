@@ -100,11 +100,19 @@ namespace pq_api.data.Repositories
 
         public Question Delete(string userId, int id)
         {
-            var question = pqEntities.Questions.Where(r => r.UserId == userId && r.QuestionIdPk == id).First();
-            // TODO - delete categories first
-            pqEntities.Questions.Remove(question);
+            var existingQuestion = pqEntities.Questions
+                                    .Include(q => q.QuestionCategories)
+                                    .ThenInclude(c => c.CategoryIdFkNavigation)
+                                    .Where(q => q.UserId == userId && q.QuestionIdPk == id).FirstOrDefault();
+            //delete categories first
+            var questionCategories = pqEntities.QuestionCategories.Where(q => q.UserId == userId && q.QuestionIdFk == id);
+            foreach (var item in questionCategories)
+            {
+                pqEntities.QuestionCategories.Remove(item);
+            }
+            pqEntities.Questions.Remove(existingQuestion);
             pqEntities.SaveChanges();
-            return question;
+            return existingQuestion;
         }
         #endregion
 

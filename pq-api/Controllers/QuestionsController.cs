@@ -141,8 +141,6 @@ namespace pq_api.Controllers
         [Authorize]
         [HttpPost("questions/update-ord")]
         public M.Question UpdateQuestionOrd(M.QuestionUpdateOrd q)
-        //public M.Question UpdateQuestionOrd(int id, int ord)
-        
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var updatedQuestion = appService.UpdateQuestionOrd(userId, q.Id, q.Ord);
@@ -156,6 +154,24 @@ namespace pq_api.Controllers
                 roundId = updatedQuestion.RoundId,
                 questionDifficulty = updatedQuestion.QuestionDifficulty,
                 ord = updatedQuestion.Ord
+            };
+        }
+
+        [Authorize]
+        [HttpDelete("questions/delete/{id}")]
+        public M.Question DeleteQuestion(int id)
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var deletedQuestion = appService.DeleteQuestion(userId, id);
+            return new M.Question
+            {
+                id = deletedQuestion.Id,
+                question = deletedQuestion.Question1,
+                answer = deletedQuestion.Answer,
+                categories = deletedQuestion.Categories.Select(c => new M.Category { Id = c.Id, Name = c.Name }).ToList(),
+                roundId = deletedQuestion.RoundId,
+                questionDifficulty = deletedQuestion.QuestionDifficulty,
+                ord = deletedQuestion.Ord
             };
         }
 
